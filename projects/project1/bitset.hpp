@@ -5,6 +5,10 @@
 #include <string>
 
 class Bitset{
+
+private:
+int *customArray;
+
 public:
 
   // TODO COMMENT
@@ -43,9 +47,6 @@ public:
   // TODO COMMENT
   std::string asString() const;
 
-private:
-
-  // TODO
 };
 
 #endif

@@ -1,104 +1,128 @@
 #include "bitset.hpp"
-//#include using namespace std;
 #include <iostream>
+#include <sstream>
+#include <algorithm>
 
-class Bitset{
-public:
+
+//use the "new" notation and use custom array as a ptr instead -- put all of this in the .hpp file
+
+
 //creates standard array of size 8
 Bitset::Bitset() {
-   int defaultArray[8];
+  int *customArray = new int[8];
+   if (good() == true)
     for (int i=0; i < 8; i++){
-        defaultArray[i] = 0;
+        customArray[i] = 0;
     }
 }
 
 //creates custom array of size N (user input)
 Bitset::Bitset(intmax_t size) {
-int customArray[size];
-    for (int i=0; i < size; i++){
-        customArray[i] = 0;
+//place valid fxn here
+int *customArray = new int[size];
+  for (int i=0; i < size; i++){
+    customArray[i] = 0;
     }
     //error checking for loop
-    for (int i=0; i < size; i++){
-        if(customArray[i]=!0)
-        std::cout << "FLAG ERR! Invalid array";
+  for (int i=0; i < size; i++){
+    if(customArray[i]=!0)
+      std::cout << "ERR! Bitset is invalid";
     }
-  }
+}
 
-
+//creates array based on string input
 Bitset::Bitset(const std::string & value) {
-    // TODO
+  for (int i=0; i < value.size(); i++){
+    if ((value[i] != '0') || (value[i] != '1')){
+       std::cout << "ERR! Bitset is invalid";
+       break;
+        }
+    else{
+     int *customArray = new int[value.size()];
+     }
+  }  
 }
 
 Bitset::~Bitset() {
     // TODO
 }
-};
+Bitset::Bitset(const Bitset & ) = delete;
+Bitset & operator=(const Bitset &) = delete;
 
 /////////////////////////////////////////////////////////////
-/*
+//end constructors and destructors
+/////////////////////////////////////////////////////////////
 
-
-  // TODO COMMENT
-  Bitset(const std::string & value);
-
-  //destructor to deallocate memory. safeguard!!
-  ~Bitset();
-
-  //this code defines the copy constructor and deletes it
-  Bitset(const Bitset & ) = delete;
-  Bitset & operator=(const Bitset &) = delete;
-
-  // this function returns the size of the object created by the class
-  //in this case, the size of the array
-  intmax_t size() const;
-
-  // boolean function that can be used to
-  bool good() const;
-
-  // sets a certain element to 1
-  void set(intmax_t index){
-    if (index <= size(customArray))
-        customArray[index] = 1;
-    else
-    //bitset becomes invalid
+intmax_t Bitset::size() const{ // this function returns the size of the array
+  int count=0;
+  for (int i=0; i < *customArray; i++ ){
+    count++;
   }
-
-  // sets a certain element to 0
-  void reset(intmax_t index){
-    if (index <= size(customArray))
-      customArray[index] = 0;
-    else
-    //bitset becomes invalid
-  }
+  return count;
+}
 
 
-  // TODO COMMENT
-  void toggle(intmax_t index){
-    if (index <= size(customArray))
-      if(customArray[index] = 0){
-        customArray[index] = 1;}
-      elseif(customArray[index] = 1){
-        customArray[index] = 0}
+bool Bitset::good() const{ // boolean function to determine if bitset is valid
+  bool choice;
+  int len = size();
+  for (int i=0; i < len; i++){
+    if ((*customArray != 0) || (*customArray != 1)){
+      std::cout << "ERR! Bitset is invalid";
+      choice = false;
+      break;
       }
-    else
-    //bitset becomes invalid
+      else if (*customArray <= 0){
+    std::cout << "ERR! Bitset is invalid";
+    choice = false;
+    }
+  else{
+  choice = true;
   }
-
-  // TODO COMMENT
-  bool test(intmax_t index);
-
-  // TODO COMMENT
-  std::string asString() const;
-
-private:
-
-  //int defaultArray[8];
-  //int customArray[];
-
-}; */
+  return choice;
+}
 
 
+void Bitset::set(intmax_t index){ // sets a certain element to 1
+  if ((index <= size()) && (index >= 0)){
+    customArray[index-1] = 1 };
+    good();
+}
 
 
-// TODO: other methods*/
+void Bitset::reset(intmax_t index){ // sets a certain element to 0
+  if (index <= size())
+    customArray[index-1] = 0;
+    good();
+}
+
+void Bitset::toggle(intmax_t index){ //toggle a certain value to be either 1 or 0
+  if (index <= size())
+    if(customArray[index] == 0){
+      customArray[index] = 1;
+      good();
+      }
+    else if(customArray[index] == 1){
+      customArray[index] = 0;
+      good();
+      }
+}
+
+bool Bitset::test(intmax_t index){
+  if(customArray[index] == 1){
+    return true;
+  }
+  elseif((customArray[index] == 1) || ((index < 0) && index > (customArray-1))){
+  return false;
+  }
+}
+
+  
+std::string Bitset::asString() const{
+  std::stringstream arrStr;
+
+}
+
+
+}
+
+
