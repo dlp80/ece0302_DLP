@@ -3,13 +3,14 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string>
+using namespace std;
 
 class Bitset{
 
   private:
   int *customArray;
   bool validity;
-  
+
   public:
 
   // TODO COMMENT
