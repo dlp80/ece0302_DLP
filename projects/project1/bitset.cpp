@@ -3,38 +3,46 @@
 #include <string>
 using namespace std;
 
+
 //use the "new" notation and use custom array as a ptr instead -- put all of this in the .hpp file
+//good function should just return the validity var but each individual fxn should internally error check
 
 //creates standard array of size 8
 Bitset::Bitset(){
+  count = 8;
   int *customArray = new int[8];
-   if (good() == true)
     for (int i=0; i < 8; i++){
         customArray[i] = 0;
     }
+    validity = true;
 }
 
 //creates custom array of size N (user input)
 Bitset::Bitset(intmax_t size) {
-//place valid fxn here
+count = size;
+if (size >= 0){
 int *customArray = new int[size];
   for (int i=0; i < size; i++){
     customArray[i] = 0;
     }
+  }
     //error checking for loop
   for (int i=0; i < size; i++){
     if(customArray[i]=!0)
-      std::cout << "ERR! Bitset is invalid";
+    validity = false;
+    std::cout << "ERR! Bitset is invalid";
     }
 }
 
 //creates array based on string input
 Bitset::Bitset(const std::string & value) {
-  for (int i=0; i < value.size(); i++){
+  count = value.length();
+  for (int i=0; i < count; i++){
     if ((value[i] == '0') || (value[i] == '1')){
       int *customArray = new int[stoi(value)];
     }
     else{
+      validity = false;
       std::cout << "ERR! Bitset is invalid";
       break;
     }
@@ -42,9 +50,10 @@ Bitset::Bitset(const std::string & value) {
 }
 
  Bitset::~Bitset(){
-  delete[] customArray;
+  delete[] &customArray;
   customArray = nullptr;
  }
+
 
 
 /////////////////////////////////////////////////////////////
@@ -53,77 +62,62 @@ Bitset::Bitset(const std::string & value) {
 
  // this function returns the size of the array
 intmax_t Bitset::size() const{
-  int count=0;
-  for (int i=0; i < *customArray; i++ ){
-    count++;
-  }
   return count;
 }
 
 // boolean function to determine if bitset is valid
 bool Bitset::good() const{
-  bool choice;
-  for (int i=0; i < size(); i++){
-    if ((*customArray != 0) || (*customArray != 1)){
-      std::cout << "ERR! Bitset is invalid";
-      choice = false;
-      break;
-      }
-    else if (*customArray <= 0){
-      std::cout << "ERR! Bitset is invalid";
-      choice = false;
-    }
-  else{
-    choice = true;
-  }
-}
-  choice = validity;
   return validity;
 }
 
 //this function sets a certain value to 1
 void Bitset::set(intmax_t index){
-  if ((index <= size()) && (index >= 0)){
+  if ((index <= count) && (index >= 0)){
+    validity = true;
     customArray[index-1] = 1;
-    good();
   }
-}
+  else{
+    validity = false;
+     }
+  }
 
 //this function sets a certain value to 0
 void Bitset::reset(intmax_t index){
-  if (index <= size()){
+  if (index <= count){
     customArray[index-1] = 0;
-    good();
+  }
+  else{
+    validity = false;
   }
 }
 
 void Bitset::toggle(intmax_t index){ //toggle a certain value to be either 1 or 0
-  if (index <= size()){
+  if (index <= count){
     if(customArray[index] == 0){
         customArray[index] = 1;
-        good();
       }
     else if(customArray[index] == 1){
       customArray[index] = 0;
-      good();
+    }
+    else{
+      validity = false;
     }
   }
 }
 
 //check if the nth bit == 1 or not
 bool Bitset::test(intmax_t index){
-  bool choice;
   if(customArray[index] == 1){
-    choice = true;
+    validity = true;
     }
   else if((customArray[index] == 1) || ((index < 0) && index > (size()-1))){
-    choice = false;
+    validity = false;
     }
-  return choice;
+  return validity;
 }
 
-std::string Bitset::asString() const{
-  std::string arrStr;
+string Bitset::asString() const{
+  string arrStr;
   arrStr.assign(customArray, customArray+size());
   return arrStr;
 }

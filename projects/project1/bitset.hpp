@@ -6,10 +6,6 @@
 
 class Bitset{
 
-  private:
-  int *customArray;
-  bool validity;
-
   public:
 
   // TODO COMMENT
@@ -47,6 +43,11 @@ class Bitset{
 
   // TODO COMMENT
   std::string asString() const;
+
+  private:
+  int *customArray = nullptr;
+  bool validity;
+  int count;
 
 };
 
