@@ -1,7 +1,6 @@
 #include "bitset.hpp"
 #include <iostream>
 #include <sstream>
-#include <algorithm>
 
 
 //use the "new" notation and use custom array as a ptr instead -- put all of this in the .hpp file
@@ -43,11 +42,6 @@ Bitset::Bitset(const std::string & value) {
   }  
 }
 
-Bitset::~Bitset() {
-    // TODO
-}
-Bitset::Bitset(const Bitset & ) = delete;
-Bitset & operator=(const Bitset &) = delete;
 
 /////////////////////////////////////////////////////////////
 //end constructors and destructors
@@ -78,21 +72,24 @@ bool Bitset::good() const{ // boolean function to determine if bitset is valid
   else{
   choice = true;
   }
-  return choice;
+  choice = validity;
+  return validity;
 }
 
-
-void Bitset::set(intmax_t index){ // sets a certain element to 1
+// sets a certain element to 1
+void Bitset::set(intmax_t index){
   if ((index <= size()) && (index >= 0)){
-    customArray[index-1] = 1 };
+    customArray[index-1] = 1;
     good();
+  }
 }
 
-
-void Bitset::reset(intmax_t index){ // sets a certain element to 0
-  if (index <= size())
+// sets a certain element to 0
+void Bitset::reset(intmax_t index){
+  if (index <= size()){
     customArray[index-1] = 0;
     good();
+  }
 }
 
 void Bitset::toggle(intmax_t index){ //toggle a certain value to be either 1 or 0
@@ -116,10 +113,9 @@ bool Bitset::test(intmax_t index){
   }
 }
 
-  
 std::string Bitset::asString() const{
-  std::stringstream arrStr;
-
+  std::string arrStr(arr, arr+size());
+  return arrStr;
 }
 
 
