@@ -1,6 +1,7 @@
 #include "bitset.hpp"
 #include <iostream>
-#include <sstream>
+#include <string>
+using namespace std;
 
 //use the "new" notation and use custom array as a ptr instead -- put all of this in the .hpp file
 
@@ -30,15 +31,20 @@ int *customArray = new int[size];
 //creates array based on string input
 Bitset::Bitset(const std::string & value) {
   for (int i=0; i < value.size(); i++){
-    if ((value[i] != '0') || (value[i] != '1')){
-       std::cout << "ERR! Bitset is invalid";
-       break;
-        }
+    if ((value[i] == '0') || (value[i] == '1')){
+      int *customArray = new int[stoi(value)];
+    }
     else{
-     int *customArray = new int[value.size()];
-     }
-  }  
+      std::cout << "ERR! Bitset is invalid";
+      break;
+    }
+  }
 }
+
+ Bitset::~Bitset(){
+  delete[] customArray;
+  customArray = nullptr;
+ }
 
 
 /////////////////////////////////////////////////////////////
@@ -57,19 +63,18 @@ intmax_t Bitset::size() const{
 // boolean function to determine if bitset is valid
 bool Bitset::good() const{
   bool choice;
-  int len = size();
-  for (int i=0; i < len; i++){
+  for (int i=0; i < size(); i++){
     if ((*customArray != 0) || (*customArray != 1)){
       std::cout << "ERR! Bitset is invalid";
       choice = false;
       break;
       }
-      else if (*customArray <= 0){
-    std::cout << "ERR! Bitset is invalid";
-    choice = false;
+    else if (*customArray <= 0){
+      std::cout << "ERR! Bitset is invalid";
+      choice = false;
     }
   else{
-  choice = true;
+    choice = true;
   }
 }
   choice = validity;
@@ -105,14 +110,15 @@ void Bitset::toggle(intmax_t index){ //toggle a certain value to be either 1 or 
   }
 }
 
+//check if the nth bit == 1 or not
 bool Bitset::test(intmax_t index){
   bool choice;
   if(customArray[index] == 1){
     choice = true;
-  }
+    }
   else if((customArray[index] == 1) || ((index < 0) && index > (size()-1))){
-  choice = false;
-  }
+    choice = false;
+    }
   return choice;
 }
 
@@ -121,3 +127,4 @@ std::string Bitset::asString() const{
   arrStr.assign(customArray, customArray+size());
   return arrStr;
 }
+

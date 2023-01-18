@@ -3,7 +3,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string>
-using namespace std;
 
 class Bitset{
 
