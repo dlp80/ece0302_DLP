@@ -6,10 +6,11 @@
 
 class Bitset{
 
-private:
-int *customArray;
-
-public:
+  private:
+  int *customArray;
+  bool validity;
+  
+  public:
 
   // TODO COMMENT
   Bitset();
