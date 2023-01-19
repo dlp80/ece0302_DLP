@@ -10,7 +10,7 @@
 //creates standard array of size 8
 Bitset::Bitset(){
   count = 8;
-  int *customArray = new int[8];
+  customArray = new int[8];
     for (int i=0; i < 8; i++){
         customArray[i] = 0;
     }
@@ -21,29 +21,30 @@ Bitset::Bitset(){
 Bitset::Bitset(intmax_t size) {
 count = size;
 if (size >= 0){
-int *customArray = new int[size];
+customArray = new int[size];
   for (int i=0; i < size; i++){
     customArray[i] = 0;
     }
   }
-    //error checking for loop
+  //error checking for loop
   for (int i=0; i < size; i++){
     if(customArray[i]=!0)
     validity = false;
-    std::cout << "ERR! Bitset is invalid";
+    //std::cout << "ERR! Bitset is invalid";
     }
 }
 
 //creates array based on string input
 Bitset::Bitset(const std::string & value) {
   count = value.length();
+  customArray = new int[count];
   for (int i=0; i < count; i++){
     if ((value[i] == '0') || (value[i] == '1')){
-      int *customArray = new int[stoi(value)];
+     customArray[i] = value[i] - '0';
     }
     else{
       validity = false;
-      std::cout << "ERR! Bitset is invalid";
+      //std::cout << "ERR! Bitset is invalid";
       break;
     }
   }
@@ -74,7 +75,7 @@ bool Bitset::good() const{
 void Bitset::set(intmax_t index){
   if ((index <= count) && (index >= 0)){
     validity = true;
-    customArray[index-1] = 1;
+    customArray[index] = 1;
   }
   else{
     validity = false;
@@ -84,7 +85,7 @@ void Bitset::set(intmax_t index){
 //this function sets a certain value to 0
 void Bitset::reset(intmax_t index){
   if (index <= count){
-    customArray[index-1] = 0;
+    customArray[index] = 0;
   }
   else{
     validity = false;
@@ -117,11 +118,12 @@ bool Bitset::test(intmax_t index){
 }
 
 std::string Bitset::asString() const{
-  std::string ss;
+  std::string ss = "";
   for (int i = 0; i < count; i++) {
-      ss += std::to_string(customArray[i]);
+        ss += std::to_string(customArray[i]);
       }
-    return ss;
+  
+  return ss;
 }
 
 
