@@ -1,7 +1,7 @@
 #include "bitset.hpp"
 #include <iostream>
 #include <string>
-using namespace std;
+//using namespace std;
 
 
 //use the "new" notation and use custom array as a ptr instead -- put all of this in the .hpp file
@@ -50,7 +50,7 @@ Bitset::Bitset(const std::string & value) {
 }
 
  Bitset::~Bitset(){
-  delete[] &customArray;
+  delete[] customArray;
   customArray = nullptr;
  }
 
@@ -116,9 +116,12 @@ bool Bitset::test(intmax_t index){
   return validity;
 }
 
-string Bitset::asString() const{
-  string arrStr;
-  arrStr.assign(customArray, customArray+size());
-  return arrStr;
+std::string Bitset::asString() const{
+  std::string ss;
+  for (int i = 0; i < count; i++) {
+      ss += std::to_string(customArray[i]);
+      }
+    return ss;
 }
+
 
