@@ -28,10 +28,13 @@ customArray = new int[size];
   }
   //error checking for loop
   for (int i=0; i < size; i++){
-    if(customArray[i]=!0)
-    validity = false;
+    if((customArray[i]==0) || (customArray[i]==1)){
+    validity = true;
     //std::cout << "ERR! Bitset is invalid";
     }
+    else
+    validity = false;
+  }
 }
 
 //creates array based on string input
@@ -54,7 +57,6 @@ Bitset::Bitset(const std::string & value) {
   delete[] customArray;
   customArray = nullptr;
  }
-
 
 
 /////////////////////////////////////////////////////////////
@@ -111,7 +113,7 @@ bool Bitset::test(intmax_t index){
   if(customArray[index] == 1){
     validity = true;
     }
-  else if((customArray[index] == 1) || ((index < 0) && index > (size()-1))){
+  else if((customArray[index] ==0) || ((index < 0) && index > (size()))){
     validity = false;
     }
   return validity;
