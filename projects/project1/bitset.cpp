@@ -94,7 +94,8 @@ void Bitset::reset(intmax_t index){
   }
 }
 
-void Bitset::toggle(intmax_t index){ //toggle a certain value to be either 1 or 0
+//toggle a certain value to be either 1 or 0
+void Bitset::toggle(intmax_t index){ 
   if (index <= count){
     if(customArray[index] == 0){
         customArray[index] = 1;
@@ -119,6 +120,7 @@ bool Bitset::test(intmax_t index){
   return validity;
 }
 
+//converts array num2str
 std::string Bitset::asString() const{
   std::string ss = "";
   for (int i = 0; i < count; i++) {

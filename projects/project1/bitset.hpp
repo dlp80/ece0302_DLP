@@ -8,40 +8,40 @@ class Bitset{
 
   public:
 
-  // TODO COMMENT
+  //creates standard array of size 8
   Bitset();
 
-  // TODO COMMENT
+  //creates custom array of size N (user input)
   Bitset(intmax_t size);
 
-  // TODO COMMENT
+  //creates array based on string input
   Bitset(const std::string & value);
 
-  // TODO COMMENT
+  //destructor
   ~Bitset();
 
   Bitset(const Bitset & ) = delete;
   Bitset & operator=(const Bitset &) = delete;
 
-  // TODO COMMENT
+  // this function returns the size of the array
   intmax_t size() const;
 
-  // TODO COMMENT
+  // boolean function to determine if bitset is valid
   bool good() const;
 
-  // TODO COMMENT
+  //this function sets a certain value to 1
   void set(intmax_t index);
 
-  // TODO COMMENT
+  //this function sets a certain value to 0
   void reset(intmax_t index);
 
-  // TODO COMMENT
+  //toggle a certain value to be either 1 or 0
   void toggle(intmax_t index);
 
-  // TODO COMMENT
+  //check if the nth bit == 1 or not
   bool test(intmax_t index);
 
-  // TODO COMMENT
+  //converts array num2str
   std::string asString() const;
 
   private:
