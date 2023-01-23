@@ -84,3 +84,26 @@ TEST_CASE( "Test combined", "[bitset]" ) {
         REQUIRE(((b.test(i + (1<<11)) == true && s.at(i + (1<<11)) == '0') || (b.test(i + (1<<11)) == false && s.at(i + (1<<11)) == '1')));
     }
 }
+
+//custom test cases
+//1. checking invalid binary string
+TEST_CASE( "Test custom", "[custom]" ) {
+    std::string s("001011100000110000011010000021");
+    Bitset b(s);
+    REQUIRE(b.size() == s.size());
+    REQUIRE_FALSE(b.good());
+    REQUIRE_FALSE(b.asString().compare(s) == 0);
+}
+
+//2. checking toggle, set, reset etc.
+TEST_CASE( "Test custom 2", "[secondcustom]" ) {
+    std::string s("00101110000011000001101000001");
+    Bitset b(s);
+    REQUIRE(b.size() == s.size());
+    b.set(3);
+    b.reset(16);
+    b.test(24);
+    b.set(40);
+    REQUIRE_FALSE(b.good());
+    REQUIRE_FALSE(b.asString().compare(s) == 0);
+}
