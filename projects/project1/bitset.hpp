@@ -46,7 +46,7 @@ class Bitset{
 
   private:
   int *customArray = nullptr;
-  bool validity;
+  bool validity = true;
   int count;
   
 

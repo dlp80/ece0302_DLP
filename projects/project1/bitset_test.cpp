@@ -87,7 +87,7 @@ TEST_CASE( "Test combined", "[bitset]" ) {
 
 //custom test cases
 //1. checking invalid binary string
-TEST_CASE( "Test custom", "[custom]" ) {
+TEST_CASE( "Test custom", "[bitset]" ) {
     std::string s("001011100000110000011010000021");
     Bitset b(s);
     REQUIRE(b.size() == s.size());
@@ -96,14 +96,22 @@ TEST_CASE( "Test custom", "[custom]" ) {
 }
 
 //2. checking toggle, set, reset etc.
-TEST_CASE( "Test custom 2", "[secondcustom]" ) {
+TEST_CASE( "testing incorrect bit bool", "[bitset]" ) {
     std::string s("00101110000011000001101000001");
     Bitset b(s);
     REQUIRE(b.size() == s.size());
-    b.set(3);
-    b.reset(16);
-    b.test(24);
-    b.set(40);
+    b.set(100);
+    REQUIRE_FALSE(b.good());
+    b.reset(4);
+    REQUIRE(b.good());
+    b.toggle(20);
+    REQUIRE(b.good());
+    b.test(300);
     REQUIRE_FALSE(b.good());
     REQUIRE_FALSE(b.asString().compare(s) == 0);
+}
+//3. testing overflow
+TEST_CASE("testing intmax overflow", "[bitset]" ){
+    Bitset b(68);
+    REQUIRE_FALSE(b.good());
 }

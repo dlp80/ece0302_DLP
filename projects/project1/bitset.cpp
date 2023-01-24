@@ -14,25 +14,21 @@ Bitset::Bitset(){
     for (int i=0; i < 8; i++){
         customArray[i] = 0;
     }
-    validity = true;
+    if (count != 8){
+      validity = false;
+    }
 }
 
 //creates custom array of size N (user input)
 Bitset::Bitset(intmax_t size) {
 count = size;
-if (size >= 0){
+if ((size >= 0) && (size <= 64)){
 customArray = new int[size];
   for (int i=0; i < size; i++){
     customArray[i] = 0;
     }
-  }
-  //error checking for loop
-  for (int i=0; i < size; i++){
-    if((customArray[i]==0) || (customArray[i]==1)){
-    validity = true;
-    //std::cout << "ERR! Bitset is invalid";
-    }
-    else
+   }
+  else{
     validity = false;
   }
 }
@@ -75,9 +71,9 @@ bool Bitset::good() const{
 
 //this function sets a certain value to 1
 void Bitset::set(intmax_t index){
-  if ((index <= count) && (index >= 0)){
-    validity = true;
+  if ((index <= count-1) && (index >= 0)){
     customArray[index] = 1;
+    validity = true;
   }
   else{
     validity = false;
@@ -86,8 +82,9 @@ void Bitset::set(intmax_t index){
 
 //this function sets a certain value to 0
 void Bitset::reset(intmax_t index){
-  if (index <= count){
+  if ((index <= count-1) && (index >= 0)){
     customArray[index] = 0;
+    validity = true;
   }
   else{
     validity = false;
@@ -96,12 +93,14 @@ void Bitset::reset(intmax_t index){
 
 //toggle a certain value to be either 1 or 0
 void Bitset::toggle(intmax_t index){ 
-  if (index <= count){
+  if ((index <= count-1) && (index >= 0)){
     if(customArray[index] == 0){
         customArray[index] = 1;
+        validity = true;
       }
     else if(customArray[index] == 1){
       customArray[index] = 0;
+      validity = true;
     }
     else{
       validity = false;
@@ -111,12 +110,17 @@ void Bitset::toggle(intmax_t index){
 
 //check if the nth bit == 1 or not
 bool Bitset::test(intmax_t index){
+if ((index <= count-1) && (index >= 0)){
   if(customArray[index] == 1){
     validity = true;
     }
   else if((customArray[index] ==0) || ((index < 0) && index > (size()))){
     validity = false;
     }
+}
+else{
+  validity = false;
+}
   return validity;
 }
 
