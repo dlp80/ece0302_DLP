@@ -108,10 +108,22 @@ TEST_CASE( "testing incorrect bit bool", "[bitset]" ) {
     REQUIRE(b.good());
     b.test(300);
     REQUIRE_FALSE(b.good());
+    b.toggle(300);
+    REQUIRE_FALSE(b.good());
     REQUIRE_FALSE(b.asString().compare(s) == 0);
 }
 //3. testing overflow
 TEST_CASE("testing intmax overflow", "[bitset]" ){
     Bitset b(68);
+    REQUIRE_FALSE(b.good());
+}
+
+TEST_CASE("testing toggle specifically", "[bitset]"){
+    std::string s("01011");
+    Bitset b(s);
+    REQUIRE(b.size() == s.size());
+    b.toggle(2);
+    REQUIRE(b.good());
+    b.toggle(10);
     REQUIRE_FALSE(b.good());
 }

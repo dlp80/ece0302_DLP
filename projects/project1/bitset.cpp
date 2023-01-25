@@ -93,7 +93,7 @@ void Bitset::reset(intmax_t index){
 
 //toggle a certain value to be either 1 or 0
 void Bitset::toggle(intmax_t index){ 
-  if ((index <= count-1) && (index >= 0)){
+  if ((index <= (count-1)) && (index >= 0)){
     if(customArray[index] == 0){
         customArray[index] = 1;
         validity = true;
@@ -101,10 +101,10 @@ void Bitset::toggle(intmax_t index){
     else if(customArray[index] == 1){
       customArray[index] = 0;
       validity = true;
+      }
     }
-    else{
-      validity = false;
-    }
+  else if ((index < 0) || (index > (count-1))){
+    validity = false;
   }
 }
 
