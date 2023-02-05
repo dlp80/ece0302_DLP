@@ -45,7 +45,12 @@ public:
 
 private:
 
-  // TODO
+   T *arr = nullptr;
+   bool validity;
+   int  size;
+   T *temp = nullptr;
+
+  
 };
 
 #include "dynamic_bag.tpp"
