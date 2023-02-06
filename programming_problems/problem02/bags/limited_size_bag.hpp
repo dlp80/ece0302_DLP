@@ -7,6 +7,7 @@ template <typename T>
 class LimitedSizeBag: public AbstractBag<T>
 {
 public:
+  static const std::size_t maxsize = 100; 
   // default constructor
   LimitedSizeBag();
   
@@ -32,8 +33,10 @@ public:
   bool contains(const T& item) const;
 
 private:
+  T *arr = nullptr;
+  int size;
+  T *temp = nullptr;
 
-  // TODO
 };
 
 #include "limited_size_bag.tpp"

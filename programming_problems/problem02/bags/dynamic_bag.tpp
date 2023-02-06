@@ -84,11 +84,14 @@ bool DynamicBag<T>::remove(const T& item)
   int j = 0;
   
   for(int i = 0; i < size; i++){
+    if (item != arr[i]){
+      temp[j] = arr[i];
+      j++;
+    }
     if (item == arr[i]){
       continue;
     }
-    temp[j] = arr[i];
-    j++;
+
   }
   if (j == size) {
     return false;
