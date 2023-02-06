@@ -46,8 +46,7 @@ public:
 private:
 
    T *arr = nullptr;
-   bool validity;
-   int  size;
+   int size;
    T *temp = nullptr;
 
   
