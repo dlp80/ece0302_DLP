@@ -94,5 +94,5 @@ DynamicBag<int> b;
   b.remove(12121);
   b.getFrequencyOf(12121);
 
-  REQUIRE(b.getFrequencyOf(12121) == 3);
+  REQUIRE(b.getFrequencyOf(12121) == 0);
 }
