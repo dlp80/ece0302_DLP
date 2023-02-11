@@ -46,7 +46,9 @@ public:
 
 private:
 
-  // TODO
+  T* arr;
+  T* temp;
+  int size;
   
 };
 
