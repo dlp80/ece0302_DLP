@@ -6,6 +6,7 @@ single alpha character is a valid operand.
 
 #include <cstdlib>
 #include <iostream>
+#include <stack>
 using std::cerr;
 using std::cout;
 using std::endl;
