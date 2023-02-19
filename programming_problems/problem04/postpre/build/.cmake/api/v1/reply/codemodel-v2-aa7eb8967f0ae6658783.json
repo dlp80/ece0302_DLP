@@ -1,0 +1,69 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "postpre",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "postpre::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-postpre-Debug-e3a46c0b5135bf674b5c.json",
+					"name" : "postpre",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "submission::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-submission-Debug-ceacd4b5d7bb171f2eb1.json",
+					"name" : "submission",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/dlapa/OneDrive/Documents/Sophomore Year @ PITT/classes spring/302/starter-code-ece0302/programming_problems/problem04/postpre/build",
+		"source" : "C:/Users/dlapa/OneDrive/Documents/Sophomore Year @ PITT/classes spring/302/starter-code-ece0302/programming_problems/problem04/postpre"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

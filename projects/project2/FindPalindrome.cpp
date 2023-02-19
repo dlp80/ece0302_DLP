@@ -11,23 +11,47 @@ using namespace std;
 // their scope is limited
 
 // helper function to convert string to lower case
-static void convertToLowerCase(string & value)
+static void convertToLowerCase(string & value) //see static void ; this permanent change - will need to put everything in a temp first
 {
 	for (int i=0; i<value.size(); i++) {
 		value[i] = tolower(value[i]);
 	}
 }
 
+//self made helper function?
+
 //------------------- PRIVATE CLASS METHODS ------------------------------------
 
 // private recursive function. Must use this signature!
 void FindPalindrome::recursiveFindPalindromes(vector<string>
-        candidateStringVector, vector<string> currentStringVector)
-{
-	// TODO need to implement this recursive function!
-	return;
-}
+        candidateStringVector, vector<string> currentStringVector){ //one for the call one for the base case
+	
+	int l = 0;
+	int r = candidateStringVector.size();
+	string temp;
 
+	//base case - all elements considered
+	for (int i = 0; i < candidateStringVector.size(); ++i){
+		for( int j = i +1; j < candidateStringVector.size(); ++j){
+			temp = candidateStringVector[i];
+			candidateStringVector[i] = candidateStringVector[j];
+			candidateStringVector[j] = temp;
+
+			//recursive function call
+			recursiveFindPalindromes(candidateStringVector, currentStringVector);
+
+			//backtracking
+			temp = candidateStringVector[i];
+			candidateStringVector[i] = candidateStringVector[j];
+			candidateStringVector[j] = temp;
+		}
+	}
+	//std::cout << candidateStringVector << endl;
+	return;
+	//include the current element
+
+
+}
 // private function to determine if a string is a palindrome (given, you
 // may change this if you want)
 //possibly leave unchanged
@@ -52,7 +76,7 @@ bool FindPalindrome::isPalindrome(string currentString) const
 to hold all of the input words that we are checking for palindromeability*/
 FindPalindrome::FindPalindrome()
 {
-	vector<string> checkplndr(0);
+	//vector<string> plndr;
 	//std::vector<std::string>* checkplndr = new std::vector<std::string>();
 }
 
@@ -65,7 +89,7 @@ FindPalindrome::~FindPalindrome()
 int FindPalindrome::number() const
 {
 	int count = 0;
-	for(int i = 0; i < checkplndr.size(); i++){
+	for(int i = 0; i < plndr.size(); i++){
 		count++;
 	}
 	return count;
@@ -74,12 +98,12 @@ int FindPalindrome::number() const
 //clears all elements from the vector
 void FindPalindrome::clear()
 {
-	for(int i = 0; i < checkplndr.size(); i++){
-		if (checkplndr.size() == 0){
+	for(int i = 0; i < plndr.size(); i++){
+		if (plndr.size() == 0){
 			break;
 		}
 		else{
-		  checkplndr.pop_back();
+		  plndr.pop_back();
 		}
 	}
 }
@@ -101,19 +125,27 @@ bool FindPalindrome::cutTest2(const vector<string> & stringVector1,
 bool FindPalindrome::add(const string & value)
 {
 	bool valid, vvalid;
+
 	//checking if the value is valid in the first place
 	for(int i = 0; i < value.length(); i++){
- 		if ((value[i] < 'A' && value[i] > 'Z') || (value[i] < 'a' && value[i] > 'z')){
+ 		if(!((value[i] >= 'A' && value[i] <= 'Z') || (value[i] >= 'a' && value[i] <= 'z'))){
 		 vvalid = false;
 		}
 		vvalid = true;
 	}
 	
+	string tempstr1 = value;
+	convertToLowerCase(tempstr1);
+	
 	//checking if it exists in vector already
 	if (vvalid == true){
-	for(int i = 0; i < checkplndr.size(); i++){
-		if(convertToLowerCase(value) != convertToLowerCase(checkplndr[i])){
-			checkplndr.push_back(value);
+	for(int i = 0; i < plndr.size(); i++){
+		string tempstr2 = plndr[i];
+		convertToLowerCase(tempstr2);
+
+		if(tempstr1 == tempstr2){
+			//check palval before pushback
+			plndr.push_back(value);
 			valid = true;
 		}
 		else{
