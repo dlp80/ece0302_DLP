@@ -76,8 +76,7 @@ bool FindPalindrome::isPalindrome(string currentString) const
 to hold all of the input words that we are checking for palindromeability*/
 FindPalindrome::FindPalindrome()
 {
-	//vector<string> plndr;
-	//std::vector<std::string>* checkplndr = new std::vector<std::string>();
+	plndr = std::vector<string>();
 }
 
 FindPalindrome::~FindPalindrome()
@@ -124,37 +123,41 @@ bool FindPalindrome::cutTest2(const vector<string> & stringVector1,
 //add a word to the vector. return false if failed true if succeed
 bool FindPalindrome::add(const string & value)
 {
-	bool valid, vvalid;
+	bool valid = false, vvalid = true;
 
 	//checking if the value is valid in the first place
 	for(int i = 0; i < value.length(); i++){
  		if(!((value[i] >= 'A' && value[i] <= 'Z') || (value[i] >= 'a' && value[i] <= 'z'))){
 		 vvalid = false;
+		 break;
 		}
+		else{
 		vvalid = true;
+		}
 	}
 	
 	string tempstr1 = value;
 	convertToLowerCase(tempstr1);
 	
-	//checking if it exists in vector already
-	if (vvalid == true){
-	for(int i = 0; i < plndr.size(); i++){
-		string tempstr2 = plndr[i];
-		convertToLowerCase(tempstr2);
+    //checking if it exists in vector already
+    if (vvalid == true){
+        for(int i = 0; i < plndr.size(); i++){
+            string tempstr2 = plndr[i];
+            convertToLowerCase(tempstr2);
 
-		if(tempstr1 == tempstr2){
-			//check palval before pushback
-			plndr.push_back(value);
-			valid = true;
-		}
-		else{
-			valid = false;
-			break;
-			}
-		}
-	}
-	return valid;
+            if(tempstr1 == tempstr2){
+                valid = false;
+                break;
+            }
+            else{
+                valid = true;
+            }
+        }
+        if (valid) {
+            plndr.push_back(value);
+        }
+    }
+    return valid;
 }
 
 //add a vector. return false if failed and true if succeed
