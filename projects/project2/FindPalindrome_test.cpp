@@ -20,3 +20,14 @@ TEST_CASE("test recursion", "[FindPalindrome]"){
 	REQUIRE(b.number() == 6);
 }
 
+TEST_CASE("test palvalidity", "[FindPalindrome]"){
+	FindPalindrome b;
+
+	REQUIRE(b.add("rac"));
+	REQUIRE(b.add("ec"));
+	REQUIRE(b.add("ar"));
+	REQUIRE(b.number() == 7);
+
+	//REQUIRE(!b.toVector());
+}
+

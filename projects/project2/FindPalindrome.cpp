@@ -25,7 +25,9 @@ static void convertToLowerCase(string & value) //see static void ; this permanen
 // private recursive function. Must use this signature!
 void FindPalindrome::recursiveFindPalindromes(vector<string>
         candidateStringVector, vector<string> currentStringVector){ //one for the call one for the base case
-	
+
+//int r = candidateStringVector.size(); //length of candidate string
+
 	int l = 0;
 	int r = candidateStringVector.size();
 	string temp;
@@ -36,7 +38,8 @@ void FindPalindrome::recursiveFindPalindromes(vector<string>
 			temp = candidateStringVector[i];
 			candidateStringVector[i] = candidateStringVector[j];
 			candidateStringVector[j] = temp;
-
+			//test
+			cout << temp;
 			//recursive function call
 			recursiveFindPalindromes(candidateStringVector, currentStringVector);
 
@@ -44,14 +47,17 @@ void FindPalindrome::recursiveFindPalindromes(vector<string>
 			temp = candidateStringVector[i];
 			candidateStringVector[i] = candidateStringVector[j];
 			candidateStringVector[j] = temp;
+			//test
+			cout << temp;
 		}
+	if(isPalindrome(candidateStringVector[i])){
+		numpal++;
+		palcount.push_back(candidateStringVector[i]);
 	}
-	//std::cout << candidateStringVector << endl;
-	return;
-	//include the current element
-
-
+	}
 }
+
+
 // private function to determine if a string is a palindrome (given, you
 // may change this if you want)
 //possibly leave unchanged
@@ -76,7 +82,8 @@ bool FindPalindrome::isPalindrome(string currentString) const
 to hold all of the input words that we are checking for palindromeability*/
 FindPalindrome::FindPalindrome()
 {
-	plndr = std::vector<string>();
+	plndr = vector<string>();
+	palcount = vector<string>();
 }
 
 FindPalindrome::~FindPalindrome()
@@ -84,14 +91,17 @@ FindPalindrome::~FindPalindrome()
 
 }
 
-//counts the number of elements in the vector
+	//Returns the current number of sentence palindromes in the
+	//FindPalindrome instance.
 int FindPalindrome::number() const
 {
-	int count = 0;
-	for(int i = 0; i < plndr.size(); i++){
-		count++;
-	}
-	return count;
+    int count = 0;
+    for (int i = 0; i < plndr.size(); i++) {
+        for (int j = 0; j < plndr[i].length(); j++) {
+            count++;
+        }
+    }
+    return count;
 }
 
 //clears all elements from the vector
@@ -120,44 +130,34 @@ bool FindPalindrome::cutTest2(const vector<string> & stringVector1,
 	return false;
 }
 
-//add a word to the vector. return false if failed true if succeed
+//DONE add a word to the vector. return false if failed true if succeed
 bool FindPalindrome::add(const string & value)
 {
-	bool valid = false, vvalid = true;
-
-	//checking if the value is valid in the first place
-	for(int i = 0; i < value.length(); i++){
- 		if(!((value[i] >= 'A' && value[i] <= 'Z') || (value[i] >= 'a' && value[i] <= 'z'))){
-		 vvalid = false;
-		 break;
-		}
-		else{
-		vvalid = true;
-		}
+int plength = plndr.size();
+int vlength = value.length();
+// first we must check that the string contains only alphabet chars
+for( int i = 0; i < vlength; i++){
+	if(!isalpha(value[i])){
+		return false;
 	}
-	
-	string tempstr1 = value;
-	convertToLowerCase(tempstr1);
-	
-    //checking if it exists in vector already
-    if (vvalid == true){
-        for(int i = 0; i < plndr.size(); i++){
-            string tempstr2 = plndr[i];
-            convertToLowerCase(tempstr2);
+}
 
-            if(tempstr1 == tempstr2){
-                valid = false;
-                break;
-            }
-            else{
-                valid = true;
-            }
-        }
-        if (valid) {
-            plndr.push_back(value);
-        }
-    }
-    return valid;
+string s1 = value;
+convertToLowerCase(s1);
+
+//DONE second we must determine that the string does not already exist in the vec
+for(int j = 0; j < plength; j++){
+	string s2 = plndr[j];
+	convertToLowerCase(s2);
+	 if(s1 == s2){
+		return false;
+	 }
+}
+//third, we must call the findpalindrome function to ensure that the addition of this word will still make a palindrome
+
+plndr.push_back(value);
+return true;
+
 }
 
 //add a vector. return false if failed and true if succeed
@@ -167,11 +167,15 @@ bool FindPalindrome::add(const vector<string> & stringVector)
 	return false;
 }
 
+//Returns a vector of vectors containing all palindromes.
 vector< vector<string> > FindPalindrome::toVector() const
 {
-	// TODO need to implement this...
-	vector<vector<string>> returnThingie;
-	return returnThingie;
+	/*vector<vector<string>> returnThingie;
+	return returnThingie;*/
+	
+	std::vector<std::vector<std::string>> output;
+	output.push_back(palcount);
+	return output;
 }
 
 /*if we make an instance of this class then we can add words
