@@ -18,16 +18,20 @@ TEST_CASE("test recursion", "[FindPalindrome]"){
 	REQUIRE(b.add("AA"));
 	REQUIRE(b.add("AaA"));
 	REQUIRE(b.number() == 6);
+	//REQUIRE(b.clear());
+	//REQUIRE(b.number() == 0);
 }
 
 TEST_CASE("test palvalidity", "[FindPalindrome]"){
 	FindPalindrome b;
 
-	REQUIRE(b.add("rac"));
-	REQUIRE(b.add("ec"));
-	REQUIRE(b.add("ar"));
-	REQUIRE(b.number() == 7);
+	REQUIRE(b.add("ta"));
+	REQUIRE(b.add("CO"));
+	REQUIRE(b.add("cat"));
+	REQUIRE(b.number() == 1);
+	//REQUIRE(b.add("ce"));
+	//REQUIRE(b.add("car"));
+	//REQUIRE(b.add("ra"));
 
-	//REQUIRE(!b.toVector());
 }
 

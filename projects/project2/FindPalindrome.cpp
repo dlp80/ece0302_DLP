@@ -18,11 +18,9 @@ static void convertToLowerCase(string & value) //see static void ; this permanen
 	}
 }
 
-//self made helper function?
-
 //------------------- PRIVATE CLASS METHODS ------------------------------------
 
-// private recursive function. Must use this signature!
+// DONE private recursive function. Must use this signature!
 void FindPalindrome::recursiveFindPalindromes(vector<string>
         candidateStringVector, vector<string> currentStringVector){ //one for the call one for the base case
     
@@ -38,6 +36,7 @@ void FindPalindrome::recursiveFindPalindromes(vector<string>
 			if (currentString.size() >= candidateStringVector.size()) {
 			numpal++;
             palcount.push_back(currentString);
+			palvec.push_back(currentStringVector);
         }}
         // Print the current combination
         for (const auto& str : currentStringVector) {
@@ -55,7 +54,9 @@ void FindPalindrome::recursiveFindPalindromes(vector<string>
             }
             if (!found) {
                 currentStringVector.push_back(candidateStringVector[i]);
-                recursiveFindPalindromes(candidateStringVector, currentStringVector);
+				if(cutTest2(candidateStringVector, currentStringVector)){ //cutTest2?
+                	recursiveFindPalindromes(candidateStringVector, currentStringVector);
+				}
                 currentStringVector.pop_back();
             }
         }
@@ -64,8 +65,7 @@ void FindPalindrome::recursiveFindPalindromes(vector<string>
 }
 
 
-
-// private function to determine if a string is a palindrome (given, you
+// DONE private function to determine if a string is a palindrome (given, you
 // may change this if you want)
 //possibly leave unchanged
 bool FindPalindrome::isPalindrome(string currentString) const
@@ -87,6 +87,7 @@ bool FindPalindrome::isPalindrome(string currentString) const
 
 /*this is the default constructor. therefore, we should make an empty vector
 to hold all of the input words that we are checking for palindromeability*/
+//DONE
 FindPalindrome::FindPalindrome()
 {
 	//initialize numpal
@@ -97,23 +98,25 @@ FindPalindrome::FindPalindrome()
 	palcount = vector<string>();
 	//empty vector
 	emptyvec = vector<string>();
+	//vector of vectors
+	palvec = vector<vector<string>>();
 
 }
-
+//DONE
 FindPalindrome::~FindPalindrome()
 {
 	clear();
 	numpal = 0;
 }
 
-//Returns the current number of sentence palindromes in the
+//DONE Returns the current number of sentence palindromes in the
 //FindPalindrome instance.
 int FindPalindrome::number() const
 {
     return numpal;
 }
 
-//clears all elements from the vector
+//DONE clears all elements from the vector
 void FindPalindrome::clear()
 {
 	palcount.clear();
@@ -121,21 +124,41 @@ void FindPalindrome::clear()
 	numpal = 0;
 }
 
-
+//DONE - tentative
 bool FindPalindrome::cutTest1(const vector<string> & stringVector)
 {
-	    string temp;
-    int len = stringVector.size();
+	int letterCnt, odds;
+	char currentLetter;
+
+	vector<string> temp = stringVector;
+    int size = stringVector.size();
     int cnt = 0, oddcount = 0; // initialize variables
 
-    // Concatenate the vector contents into a temporary string
-    for (int i = 0; i < len; i++) {
-        temp += stringVector[i];
+    // convert to LC
+    for (int i = 0; i < size; i++) {
+        convertToLowerCase(temp[i]);
     }
-
-    int len2 = temp.size();
-
-    // Determine if even length or odd length
+	for(int i = 0; i < size; i++){
+		for(int j = 0; j < temp[i].size(); j++){
+			letterCnt = 0;
+			currentLetter = temp[i][j];
+			for(int t =0; t < size; t++){
+				for(int p =0; p < size; p++){
+					if(currentLetter == temp[t][p]){
+						letterCnt++;
+					}
+				}
+			}
+		if(letterCnt%2 == 1){
+			odds++;
+		}
+	}
+}
+if(odds > 1){
+	return false;
+}
+return true;
+ /*   // Determine if even length or odd length
     if (len2 % 2 == 0) { // Even choice
         // If even length
         for (int j = 0; j < len2; j++) {
@@ -167,8 +190,10 @@ bool FindPalindrome::cutTest1(const vector<string> & stringVector)
         }
     }
     return true;
+}*/
 }
 
+//DONE -- see instructions for deliverable
 bool FindPalindrome::cutTest2(const vector<string> & stringVector1,
                               const vector<string> & stringVector2)
 {
@@ -198,14 +223,14 @@ bool FindPalindrome::cutTest2(const vector<string> & stringVector1,
 	for(int j = 0; j < secondhalf.length(); j++){
 		int c1 = 0;
 		int c2 = 0;
-		char item = secondhalf[i];
+		char item = secondhalf[j];
 		for(int i = 0; i < secondhalf.length(); i++){
 			if(item == secondhalf[i]){
 				c2++;
 			}
 		}	
 		for(int t = 0; t < firsthalf.length(); t++){
-			if(item == firsthalf[i]){
+			if(item == firsthalf[t]){
 				c1++;
 			}	
 		}
@@ -233,7 +258,7 @@ for( int i = 0; i < vlength; i++){
 string s1 = value;
 convertToLowerCase(s1);
 
-//DONE second we must determine that the string does not already exist in the vec
+//second we must determine that the string does not already exist in the vec
 for(int j = 0; j < plength; j++){
 	string s2 = plndr[j];
 	convertToLowerCase(s2);
@@ -243,43 +268,75 @@ for(int j = 0; j < plength; j++){
 }
 //third, we must call the findpalindrome function to ensure that the addition of this word will still make a palindrome
 numpal = 0;
+palcount.clear();
 plndr.push_back(value);
-recursiveFindPalindromes(plndr, emptyvec);
+if(cutTest1(plndr)){
+	recursiveFindPalindromes(plndr, emptyvec);
+}
 return true;
 
 }
 
-//add a vector. return false if failed and true if succeed
+//DONE add a vector. return false if failed and true if succeed
 bool FindPalindrome::add(const vector<string> & stringVector)
 {
-	// TODO need to implement this...
-	return false;
+	vector<string> ttvec = stringVector;
+	string test;
+	int size = stringVector.size();
+	vector<string> tempVec = stringVector;
+	for(int i =0; i<size; i++){
+		convertToLowerCase(ttvec[i]);
+	}
+
+	for(int i = 0; i < size ; i++){
+		test += stringVector[i];
+	}
+	convertToLowerCase(test);
+	int testlength = test.length();
+
+	// first we must check that the vector contains only alphabet chars
+	for( int i = 0; i < testlength; i++){
+	if(!isalpha(test[i])){
+		return false;
+		}
+	}
+	//second we must determine that the string in the vector does not already exist in the vec
+	for(int i = 0; i < plndr.size(); i++){
+		for(int j = 0; j < size; j++){
+			if(i != j){
+				if(stringVector[i]==plndr[j]){
+					return false;
+				}
+			}
+		} //checking without regard for case
+		for(int t = 0; t < size; t++){
+			if(i != t){
+				if(ttvec[i] == plndr[t]){
+					return false;
+				}
+			}
+		}
+	}
+////third, we must call the findpalindrome function to ensure that the addition of this word will still make a palindrome
+for(int i =0; i < size; i++){
+	plndr.push_back(stringVector[i]);
+}
+numpal =0;
+palcount.clear();
+
+if(cutTest1(plndr)){ //we need to ! it for it to work
+	recursiveFindPalindromes(plndr, emptyvec);
+}
+return true;
+	//return false;
 }
 
-//Returns a vector of vectors containing all palindromes.
+//DONE Returns a vector of vectors containing all palindromes.
 vector< vector<string> > FindPalindrome::toVector() const
 {
+	//TODO
 	//vector<vector<string>> returnThingie;
-	//palcount = returnThingie;
-	return palcount;
+	return palvec;
+	//return palcount; //returning what????
 
 }
-
-/*if we make an instance of this class then we can add words
-to the instance and the instance will determine all possible orders of the words
-that will form sentence palindromes
-
-now note: a word does not need to be an exact word. each word will be a string
-consisting of solely alphabet characters and no punctuation.
-
-capitalization is preserved, but must be discarded when determining if a sentence is a palindrome
->>must use some kind of temp? 
-capitalization does not make for unique words
-
-discrete part: if we have N unique words, then there exists N! possible orderings (sentences)
->> we must implement the factorial recusively
->>NOT EVERY COMBO WILL BE A PALINDROME
-
->>make cut conditions. #1 check that no more than 1 character appears an odd number of times
->>else cut
->>these cut functions should be functional as priv vars */
