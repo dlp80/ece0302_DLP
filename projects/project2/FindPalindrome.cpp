@@ -25,37 +25,44 @@ static void convertToLowerCase(string & value) //see static void ; this permanen
 // private recursive function. Must use this signature!
 void FindPalindrome::recursiveFindPalindromes(vector<string>
         candidateStringVector, vector<string> currentStringVector){ //one for the call one for the base case
+    
+    //one for the call one for the base case
+    if (currentStringVector.size() == candidateStringVector.size()) {
+        // Check if the current combination is a palindrome
+        string currentString;
+        for (const auto& str : currentStringVector) {
+            currentString += str;
+        }
+        if (isPalindrome(currentString))
+		{
+			if (currentString.size() >= candidateStringVector.size()) {
+			numpal++;
+            palcount.push_back(currentString);
+        }}
+        // Print the current combination
+        for (const auto& str : currentStringVector) {
+            cout << str << " ";
+        }
+        cout << endl;
+    } else {
+        for (int i = 0; i < candidateStringVector.size(); i++) {
+            bool found = false;
+            for (int j = 0; j < currentStringVector.size(); j++) {
+                if (candidateStringVector[i] == currentStringVector[j]) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                currentStringVector.push_back(candidateStringVector[i]);
+                recursiveFindPalindromes(candidateStringVector, currentStringVector);
+                currentStringVector.pop_back();
+            }
+        }
+    }
 
-//int r = candidateStringVector.size(); //length of candidate string
-
-	int l = 0;
-	int r = candidateStringVector.size();
-	string temp;
-
-	//base case - all elements considered
-	for (int i = 0; i < candidateStringVector.size(); ++i){
-		for( int j = i +1; j < candidateStringVector.size(); ++j){
-			temp = candidateStringVector[i];
-			candidateStringVector[i] = candidateStringVector[j];
-			candidateStringVector[j] = temp;
-			//test
-			cout << temp;
-			//recursive function call
-			recursiveFindPalindromes(candidateStringVector, currentStringVector);
-
-			//backtracking
-			temp = candidateStringVector[i];
-			candidateStringVector[i] = candidateStringVector[j];
-			candidateStringVector[j] = temp;
-			//test
-			cout << temp;
-		}
-	if(isPalindrome(candidateStringVector[i])){
-		numpal++;
-		palcount.push_back(candidateStringVector[i]);
-	}
-	}
 }
+
 
 
 // private function to determine if a string is a palindrome (given, you
@@ -82,57 +89,138 @@ bool FindPalindrome::isPalindrome(string currentString) const
 to hold all of the input words that we are checking for palindromeability*/
 FindPalindrome::FindPalindrome()
 {
+	//initialize numpal
+	numpal = 0;
+	//vector to store strings in after add
 	plndr = vector<string>();
+	//vector to store completed palindromes in
 	palcount = vector<string>();
+	//empty vector
+	emptyvec = vector<string>();
+
 }
 
 FindPalindrome::~FindPalindrome()
 {
-
+	clear();
+	numpal = 0;
 }
 
-	//Returns the current number of sentence palindromes in the
-	//FindPalindrome instance.
+//Returns the current number of sentence palindromes in the
+//FindPalindrome instance.
 int FindPalindrome::number() const
 {
-    int count = 0;
-    for (int i = 0; i < plndr.size(); i++) {
-        for (int j = 0; j < plndr[i].length(); j++) {
-            count++;
-        }
-    }
-    return count;
+    return numpal;
 }
 
 //clears all elements from the vector
 void FindPalindrome::clear()
 {
-	for(int i = 0; i < plndr.size(); i++){
-		if (plndr.size() == 0){
-			break;
-		}
-		else{
-		  plndr.pop_back();
-		}
-	}
+	palcount.clear();
+	plndr.clear();
+	numpal = 0;
 }
+
 
 bool FindPalindrome::cutTest1(const vector<string> & stringVector)
 {
-	// TODO need to implement this...
-	return false;
+	    string temp;
+    int len = stringVector.size();
+    int cnt = 0, oddcount = 0; // initialize variables
+
+    // Concatenate the vector contents into a temporary string
+    for (int i = 0; i < len; i++) {
+        temp += stringVector[i];
+    }
+
+    int len2 = temp.size();
+
+    // Determine if even length or odd length
+    if (len2 % 2 == 0) { // Even choice
+        // If even length
+        for (int j = 0; j < len2; j++) {
+            for (int i = j + 1; i < len2; i++) { // Increment i, not j
+                if (temp[j] == temp[i]) {
+                    cnt++;
+                }
+            }
+            if (cnt % 2 == 1) {
+                return false;
+            }
+            cnt = 0; // Reset counter for next iteration
+        }
+    }
+    else if (len2 % 2 == 1) { // Odd choice
+        for (int j = 0; j < len2; j++) {
+            for (int i = j + 1; i < len2; i++) { // Increment i, not j
+                if (temp[j] == temp[i]) {
+                    cnt++;
+                }
+            }
+            if (cnt % 2 == 1) {
+                oddcount++;
+            }
+            cnt = 0; // Reset counter for next iteration
+        }
+        if (oddcount > 1) {
+            return false;
+        }
+    }
+    return true;
 }
 
 bool FindPalindrome::cutTest2(const vector<string> & stringVector1,
                               const vector<string> & stringVector2)
 {
-	// TODO need to implement this...
-	return false;
+	vector<string>test1 = stringVector1;
+	vector<string>test2 = stringVector1;
+	string t1, t2, firsthalf, secondhalf;
+	int size1 = test1.size(), size2 = test2.size();
+
+	for(int i =0; i < size1; i++){
+		convertToLowerCase(test1[i]);
+		t1 += test1[i]; 
+	}
+
+	for(int i =0; i < size1; i++){
+		convertToLowerCase(test2[i]);
+		t2 += test2[i]; 
+	}
+	if(size1 > size2){
+		firsthalf = t1;
+		secondhalf = t2;
+	}
+	else{
+		firsthalf = t2;
+		secondhalf = t1;
+	}
+
+	for(int j = 0; j < secondhalf.length(); j++){
+		int c1 = 0;
+		int c2 = 0;
+		char item = secondhalf[i];
+		for(int i = 0; i < secondhalf.length(); i++){
+			if(item == secondhalf[i]){
+				c2++;
+			}
+		}	
+		for(int t = 0; t < firsthalf.length(); t++){
+			if(item == firsthalf[i]){
+				c1++;
+			}	
+		}
+		if(c2 > c1){
+			return false;
+		}
+	}
+return true;
+	
 }
 
 //DONE add a word to the vector. return false if failed true if succeed
 bool FindPalindrome::add(const string & value)
 {
+
 int plength = plndr.size();
 int vlength = value.length();
 // first we must check that the string contains only alphabet chars
@@ -154,8 +242,9 @@ for(int j = 0; j < plength; j++){
 	 }
 }
 //third, we must call the findpalindrome function to ensure that the addition of this word will still make a palindrome
-
+numpal = 0;
 plndr.push_back(value);
+recursiveFindPalindromes(plndr, emptyvec);
 return true;
 
 }
@@ -170,12 +259,10 @@ bool FindPalindrome::add(const vector<string> & stringVector)
 //Returns a vector of vectors containing all palindromes.
 vector< vector<string> > FindPalindrome::toVector() const
 {
-	/*vector<vector<string>> returnThingie;
-	return returnThingie;*/
-	
-	std::vector<std::vector<std::string>> output;
-	output.push_back(palcount);
-	return output;
+	//vector<vector<string>> returnThingie;
+	//palcount = returnThingie;
+	return palcount;
+
 }
 
 /*if we make an instance of this class then we can add words
