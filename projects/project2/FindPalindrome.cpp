@@ -36,13 +36,13 @@ void FindPalindrome::recursiveFindPalindromes(vector<string>
 			if (currentString.size() >= candidateStringVector.size()) {
 			numpal++;
             palcount.push_back(currentString);
-			palvec.push_back(currentStringVector);
+			palvec.push_back(currentStringVector); //return of last function
         }}
         // Print the current combination
-        for (const auto& str : currentStringVector) {
+        /*for (const auto& str : currentStringVector) {
             cout << str << " ";
         }
-        cout << endl;
+        cout << endl;*/
     } else {
         for (int i = 0; i < candidateStringVector.size(); i++) {
             bool found = false;
@@ -61,7 +61,6 @@ void FindPalindrome::recursiveFindPalindromes(vector<string>
             }
         }
     }
-
 }
 
 // DONE private function to determine if a string is a palindrome (given, you
@@ -122,7 +121,7 @@ void FindPalindrome::clear()
 	numpal = 0;
 }
 
-//-- tentative
+//DONE see instructions for deliverable
 bool FindPalindrome::cutTest1(const vector<string> & stringVector)
 {
     // initialize variables
@@ -169,7 +168,7 @@ return true;
 //
 }
 
-//-- see instructions for deliverable
+//DONE see instructions for deliverable
 bool FindPalindrome::cutTest2(const vector<string> & stringVector1,
                               const vector<string> & stringVector2)
 {
@@ -204,6 +203,9 @@ bool FindPalindrome::cutTest2(const vector<string> & stringVector1,
 	convertToLowerCase(smaller);
 
 	//loop through all chars -- zero out count1/2 at the start
+	//count number of times char occurs in small str
+	//count number of times char occurs in big str - these 2 are separate for loops within the loop through all chars. 
+	//if smallstr has more of a given char return false
 	for(int i = 0; i < alphabet.size(); i++){
 		count1 = 0;
 		count2 = 0;
@@ -222,11 +224,6 @@ bool FindPalindrome::cutTest2(const vector<string> & stringVector1,
 	}
 }
 return true;
-	//count number of times char occurs in small str
-	//count number of times char occurs in big str - these 2 are separate for loops within the loop through all chars. 
-	//if smallstr has more of a given char return false
-
-	//this makes a string out of the first vector and stores it in the smaller one
 
 }
 
@@ -267,7 +264,7 @@ return true;
 
 }
 
-//-- add a vector. return false if failed and true if succeed
+//DONE add a vector. return false if failed and true if succeed
 bool FindPalindrome::add(const vector<string> & stringVector)
 {
 	vector<string> ttvec = stringVector;
