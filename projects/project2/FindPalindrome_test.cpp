@@ -25,10 +25,20 @@ TEST_CASE("test recursion", "[FindPalindrome]"){
 TEST_CASE("test palvalidity", "[FindPalindrome]"){
 	FindPalindrome b;
 
-	REQUIRE(b.add("ta"));
-	REQUIRE(b.add("CO"));
-	REQUIRE(b.add("cat"));
-	REQUIRE(b.number() == 1);
+	std::vector<std::string> contents;
+	contents.push_back("AW");
+	contents.push_back("AW");
+	contents.push_back("Z");
+
+	//REQUIRE(!b.cutTest1(contents));
+	REQUIRE(!b.add(contents));
+
+	
+
+	//REQUIRE(b.add("ta"));
+	//REQUIRE(b.add("CO"));
+	//REQUIRE(b.add("cat"));
+	//REQUIRE(b.number() == 1);
 	//REQUIRE(b.add("ce"));
 	//REQUIRE(b.add("car"));
 	//REQUIRE(b.add("ra"));

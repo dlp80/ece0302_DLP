@@ -8,9 +8,9 @@ class FindPalindrome{
 
 private:
 	// private stuff that you define and implement goes here...
-	std::vector<std::string> plndr;
-	std::vector<std::string> palcount;
-	std::vector<std::string> emptyvec;
+	std::vector<std::string> plndr; //holds all words to test palindrome
+	std::vector<std::string> palcount; //holds count of all finished palindromes
+	std::vector<std::string> emptyvec; //parent empty vector
 	std::vector<std::vector<std::string>> palvec;
 	int numpal = 0;
 	// ...
