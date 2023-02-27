@@ -5,30 +5,41 @@
 
 template<typename T> LinkedList<T> sort(LinkedList<T> list)
 {
-    //case where contents = 0 or 1
-    std::size_t n = list.getLength();
-    if (n <= 1) {
+        if (list.getLength() <= 1) {
+        // List is already sorted or empty
         return list;
     }
 
-    // Bubble sort algorithm
-    bool swapped = true;
-    while (swapped) {
+    bool swapped;
+    do {
         swapped = false;
-        for (std::size_t i = 1; i < (n-1); ++i) {
-            T item1 = list.getEntry(i);
-            T item2 = list.getEntry(i+1);
-            if (item1 = item2) {
-                list.setEntry(i, item2);
-                list.setEntry(i+1, item1);
+        //Node<T>* curr = list.getHead();
+        Node<T>* curr = list.getEntry(1);
+        Node<T>* prev = nullptr;
+
+        while (curr->getNext() != nullptr) {
+            if (curr->getItem() > curr->getNext()->getItem()) {
+                // Swap adjacent nodes
+                Node<T>* temp = curr->getNext();
+                curr->setNext(temp->getNext());
+                temp->setNext(curr);
+                if (prev != nullptr) {
+                    prev->setNext(temp);
+                } else {
+                    //list.setHead(temp);
+                    list.setEntry(1, temp);
+                }
+                prev = temp;
                 swapped = true;
+            } else {
+                prev = curr;
+                curr = curr->getNext();
             }
         }
-        --n;
-    }
+    } while (swapped);
 
     return list;
 }
 
-#endif
 
+#endif
