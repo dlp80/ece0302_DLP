@@ -5,38 +5,50 @@
 
 template<typename T> LinkedList<T> sort(LinkedList<T> list)
 {
-        if (list.getLength() <= 1) {
-        // List is already sorted or empty
+    int n = list.getLength();
+
+    // If list is empty or has only one element, return the list
+    if (n <= 1) {
         return list;
     }
 
-    bool swapped;
-    do {
-        swapped = false;
-        //Node<T>* curr = list.getHead();
-        Node<T>* curr = list.getEntry(1);
-        Node<T>* prev = nullptr;
+    // Perform bubble sort algorithm
+    for (int i = 0; i < n-1; i++) {
+        bool swapped = false;
 
-        while (curr->getNext() != nullptr) {
-            if (curr->getItem() > curr->getNext()->getItem()) {
-                // Swap adjacent nodes
-                Node<T>* temp = curr->getNext();
-                curr->setNext(temp->getNext());
-                temp->setNext(curr);
-                if (prev != nullptr) {
-                    prev->setNext(temp);
+        // Traverse the list from beginning to end
+        Node<T>* current = list.getNodeAt(1);
+        Node<T>* previous = nullptr;
+
+        for (int j = 0; j < n-i-1; j++) {
+            Node<T>* next = current->getNext();
+
+            if (current->getItem() > next->getItem()) {
+                // Swap the elements
+                if (previous == nullptr) {
+                    list.setEntry(1, next);
+                    current->setNext(next->getNext());
+                    next->setNext(current);
+                    previous = next;
+                    swapped = true;
                 } else {
-                    //list.setHead(temp);
-                    list.setEntry(1, temp);
+                    previous->setNext(next);
+                    current->setNext(next->getNext());
+                    next->setNext(current);
+                    previous = next;
+                    swapped = true;
                 }
-                prev = temp;
-                swapped = true;
             } else {
-                prev = curr;
-                curr = curr->getNext();
+                previous = current;
+                current = next;
             }
         }
-    } while (swapped);
+
+        // If no elements were swapped, the list is sorted
+        if (!swapped) {
+            break;
+        }
+    }
 
     return list;
 }
