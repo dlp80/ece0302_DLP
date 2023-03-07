@@ -1,8 +1,5 @@
-//  Adapated from Frank M. Carrano and Timothy M. Henry.
 
-/** ADT Stack implementation.
-    @file Stack.cpp */
-
+//adt stack implementations
 #include <iostream>
 #include <cstddef>
 #include "Stack.hpp"
