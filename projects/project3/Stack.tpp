@@ -7,8 +7,8 @@
 
 //DONE: Implement the constructor here
 template<class ItemType>
-Stack<ItemType>::Stack() {
-	headPtr = nullptr;
+Stack<ItemType>::Stack() : headPtr(nullptr)
+{
 }  // end default constructor
 
 //DONE: Implement the destructor here
@@ -39,13 +39,15 @@ int Stack<ItemType>::size() const
 //DONE Implement the push method here
 template<class ItemType>
 bool Stack<ItemType>::push(const ItemType& newItem){
-	Node<ItemType>* newNodeptr = new Node<ItemType>(newItem, headPtr);
-	headPtr = newNodeptr;
-	newNodeptr = nullptr;
+	Node<ItemType>* newNodePtr = new Node<ItemType>(newItem, headPtr);
+	while(headPtr != newNodePtr){
+	headPtr = newNodePtr;
+	newNodePtr = nullptr;
 	//increment size counter
 	currentSize++;
-
 	return true;
+	}
+	return false;
 }  // end push
 
 //DONE Implement the peek method here
