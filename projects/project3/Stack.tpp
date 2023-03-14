@@ -57,11 +57,19 @@ bool Stack<ItemType>::push(const ItemType& newItem){
 template<class ItemType>
 ItemType Stack<ItemType>::peek() const
 {
-	while(!isEmpty()); //enforcing precondition during debugging
-	return headPtr->getItem();
+    if (!isEmpty()) {
+        return headPtr->getItem();
+    }
+    else {
+        // Return a default-constructed ItemType object if stack is empty
+        return ItemType{};
+    }	
 
-	//ItemType returnItem;
-	//return returnItem;
+	/*ItemType returnItem;
+	while(!isEmpty()); {//enforcing precondition during debugging
+		returnItem = headPtr->getItem();
+	}
+	return returnItem;*/
 }  // end peek
 
 //DONE Implement the pop method here

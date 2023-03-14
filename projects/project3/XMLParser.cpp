@@ -18,6 +18,12 @@ XMLParser::~XMLParser()
 }  // end destructor
 
 // TODO: Implement the tokenizeInputString method
+/*main idea: we want to first read through the entire string. every time we encounter < or > push it + the contents inside onto the stack
+once there are no doubles, we will proceed to the next round of testing. for all contents between <>, check
+for "tag type". must be successful start/end combo, empty tag, and ? declaration.
+
+once we check that everything has proper enclosing in tags <>, we must then determine if each tag
+falls under one of the 4 tag categories*/
 bool XMLParser::tokenizeInputString(const std::string &inputString)
 {
 	return false;
