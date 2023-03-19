@@ -23,15 +23,16 @@ Stack<ItemType>::~Stack(){
 //DONE: Implement the isEmpty method here
 template<class ItemType>
 bool Stack<ItemType>::isEmpty() const{
-	return headPtr == nullptr;
+	return (headPtr == nullptr);
 }  // end isEmpty
 
 // DONE: Implement the size method here
 template<class ItemType>
 int Stack<ItemType>::size() const
 {
+	int empty = 0;
 	if(isEmpty()){
-		return 0;
+		return empty;
 	}
 	else{
 		return currentSize;
@@ -42,9 +43,9 @@ int Stack<ItemType>::size() const
 template<class ItemType>
 bool Stack<ItemType>::push(const ItemType& newItem){
 	Node<ItemType>* newNodePtr = new Node<ItemType>(newItem, headPtr);
-	if(newNodePtr == nullptr){
+	/*if(newNodePtr == nullptr){
 		return false;
-	}
+	}*/
 	headPtr = newNodePtr;
 	newNodePtr = nullptr;
 	//increment size counter
@@ -57,13 +58,14 @@ bool Stack<ItemType>::push(const ItemType& newItem){
 template<class ItemType>
 ItemType Stack<ItemType>::peek() const
 {
-    if (!isEmpty()) {
-        return headPtr->getItem();
+	return headPtr->getItem();
+    /* (!isEmpty()) {
+        
     }
     else {
         // Return a default-constructed ItemType object if stack is empty
         return ItemType{};
-    }	
+    }	*/
 
 	/*ItemType returnItem;
 	while(!isEmpty()); {//enforcing precondition during debugging
@@ -101,5 +103,6 @@ void Stack<ItemType>::clear()
 	while(!isEmpty()){
 		pop();
 	}
+	currentSize = 0;
 }  // end clear
 

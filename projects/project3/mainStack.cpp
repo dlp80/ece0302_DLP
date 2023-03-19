@@ -12,7 +12,7 @@ int main()
 	// Put the alphabet on the stack backwards...
 	cout << endl << "*** Adding stuff to the stack ***" << endl;
 	for (char c='z'; c>='a'; c--)
-	{
+	{ 
 		myCharStack.push(c);
 		cout << c << " ";
 	}
