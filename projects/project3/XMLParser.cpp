@@ -6,16 +6,17 @@
 #include <string>
 #include <assert.h>
 #include "XMLParser.hpp"
-static std::string deleteAttributes(std::string input);
-// Implement the constructor here
-XMLParser::XMLParser() : size(0)
+
+// TODO: Implement the constructor here
+XMLParser::XMLParser()
 {
+	size = 0;
 	elementNameBag = new Bag <std::string>;
 	parseStack=new Stack <std::string>;
 	tokenizedInputVector={};
 }  // end default constructor
 
-// Implement the destructor here
+// TODO: Implement the destructor here
 XMLParser::~XMLParser()
 {
 	delete elementNameBag;
@@ -24,189 +25,343 @@ XMLParser::~XMLParser()
 	size = 0;
 }  // end destructor
 
-//  Implement the tokenizeInputString method
+
+// TODO: Implement the tokenizeInputString method
+/*main idea: we want to first read through the entire string. every time we encounter < or > push it + the contents inside onto the stack
+once there are no doubles, we will proceed to the next round of testing. for all contents between <>, check
+for "tag type". must be successful start/end combo, empty tag, and ? declaration.
+
+once we check that everything has proper enclosing in tags <>, we must then determine if each tag
+falls under one of the 4 tag categories*/
 bool XMLParser::tokenizeInputString(const std::string &inputString)
 {
-	int i=0;
-	string word;
-	string inValid="!#$\"%&'()*+,/;<=>?@[]^`{|}~\\";
+//initialize
+	//std::cout << inputString;
+	
+	string item;
+	string name;
+	string badTag="!#$\"%&'()*+,/;<=>?@[]^`{|}~\\";
 	string badStart=".-,0123456789";
 	StringTokenType type;
 	TokenStruct element ;
-	while (i != inputString.length())
-	{
-		//check if first char is a starting tag
-		if (inputString.at(0) != '<')
-		{
-			tokenizedInputVector.clear();
-			return false;
+
+	//checking start and end characters are indeed carrots
+	int dim = inputString.length();
+
+
+	// pushing < and > onto temp stack. checking for << or >> appearances
+	for(int i=0; i < inputString.length(); i++){
+		if(inputString[i] =='<' || inputString[i] == '>'){
+			//push the carrots onto the stack
+			item.push_back(inputString[i]);
 		}
-		word="";
-		//check if the word is encapsulated
-		if(inputString.at(i) == '<')
-		{
-			//setting the tags
-			i++;
-			
-			if(inputString.at(i)=='/')
-			{
-				type=END_TAG;
-				i++;
-
-				//checking for bad starts 
-				for (int k = 0; k<badStart.length(); k++)
-				{
-					if(inputString.at(i)==badStart.at(k))
-					{
-						tokenizedInputVector.clear();
-						return false;
-					}
-				}
-			}
-			else if (inputString.at(i)=='?')
-			{
-				type = DECLARATION;
-				i++;
-				//checking for bad starts 
-				for (int k = 0; k<badStart.length(); k++)
-				{
-					if(inputString.at(i)==badStart.at(k))
-					{
-						tokenizedInputVector.clear();
-						return false;
-					}
-				}
-			}
-			else
-			{
-				type = START_TAG;
-			}
-			
-			while(inputString.at(i) != '>')
-			{
-				//|| inputString.at(i)=='/'
-				if(inputString.at(i)=='<' )
-				{
-					tokenizedInputVector.clear();
-					return false;
-				}
-				word=word + inputString.substr(i,1);
-				i++;
-			}
-			
-			//make sure the declaration is with the ?s in the correct syntax
-			if(type == DECLARATION)
-			{
-				if(inputString.at(i-1)=='?')
-				{
-					int len=word.length();
-					word=word.substr(0,len-1);
-				}
-				else
-				{
-					tokenizedInputVector.clear();
-					return false;
-				}
-			} 
-
-			//checking if it is an empty tag
-			if (type == START_TAG && inputString.at(i-1)=='/')
-			{
-				type=EMPTY_TAG;
-				int len=word.length();
-				word=word.substr(0,len-1);
-			}
-
-			//get rid of anything after the tag / ' '
-			if (type == START_TAG || type == EMPTY_TAG)
-			{
-				word=deleteAttributes(word);
-			}
-
-			//checking for invalid characters
-			for (int j = 0;j<word.length();j++)
-			{
-				for (int k=0;k<inValid.length();k++)
-				{
-					if(word.at(j)==inValid.at(k))
-					{
-						tokenizedInputVector.clear();
-						return false;
-					}
-				}
-			}
-
-			if (type == START_TAG || type == EMPTY_TAG)
-			{
-				//adding tag to bag
-				elementNameBag->add(word);
-			}
-
-			element = {type,word};
-			tokenizedInputVector.push_back(element);
-			size++;
-		}
-		
-		//checking content
-		else if (inputString.at(i)=='>')
-		{
-			i++; 
-			
-			//making sure it is actually content and not another tag
-			if (inputString.at(i)=='<')
-			{
-				break;
-			}
-			type=CONTENT;
-			while(inputString.at(i) != '<')
-			{
-				word=word + inputString.substr(i,1);
-				i++;
-			}
-
-			//checking for invalid characters and nested endings >>
-			for (int j = 0;j<word.length();j++)
-			{
-				for (int k=0;k<inValid.length();k++)
-				{
-					if(word.at(j)==inValid.at(k))
-					{
-						tokenizedInputVector.clear();
-						return false;
-					}
-				}
-			}
-
-			element = {type,word};
-			tokenizedInputVector.push_back(element);
-			size++;
-		}
-
 	}
-	return true;
-}  // end
 
-//  Implement a helper function to delete attributes from a START_TAG
-// or EMPTY_TAG string (you can change this...)
-static std::string deleteAttributes(std::string input)
-{
-	int loc=input.find(' ');
-	int len=input.length();
-	string word  = input.substr(0,loc);
-	string word2 = input.substr(0,len);
-	
-	//if there is a space before the end of the tag only return the first part
-	if(word.length() < word2.length())
-	{
-		return word;
+	for(int j = 0; j < item.length(); j++){
+			if(item[j] == item[j+1]){
+				return false;
+			}
 	}
-	else
-	{
-		return word2;
-	}
+
+
+//we should now not anticipate any << or >> its chill
+
+//PHASE 2
+
+//now that we have checked that inputString is good, we track through it. 
+//the stack will hold <tag> | "content" | <tag>
+//we must error check each item
+
+//std::string inputString = "<test>content</test>";
+std::vector<std::string> output;
+std::string tag, content;
+
+for (size_t i = 0; i < inputString.size(); i++) {
+
+    if (inputString[i] == '<') {
+        // Push the previous content string to the output vector (if it's not empty)
+        if (!content.empty()) {
+            output.push_back(content);
+            content.clear();
+        }
+        // Copy the tag character by character into a temporary string
+        tag.clear();
+		tag = '<';
+        size_t j = i + 1;
+        while (j < inputString.size() && inputString[j] != '>') {
+            tag += inputString[j];
+            j++;
+        }
+        // Push the completed tag to the output vector
+        tag += '>';
+        output.push_back(tag);
+        // Jump to the end of the tag
+        i = j;
+    } else {
+        // Copy non-tag characters into the content string
+        content += inputString[i];
+    }
 }
 
-// Implement the parseTokenizedInput method here
+// Push any remaining content to the output vector (if it's not empty)
+if (!content.empty()) {
+    output.push_back(content);
+}
+//test print
+for (const auto& item : output) {
+    std::cout << item << " ";
+}
+	
+	// Push any remaining content onto stack
+	/*if (!output.empty()) {
+		//do not push whitespace as content
+		tagStack.push_back(output);
+	}*/
+	
+	//now we begin testing one thing from the stack at a time. first we check if char1
+	//is a '<' . if it is, then we call it a tag
+	//if we encounter a tag, we then type it, and determine tag name validity
+	//if the item is not a tag, we sort it as content
+
+	//bool isTag, isStuff;
+	//for later
+	//Stack<string> tempStack = tagStack;
+	vector<string> tempVec = output;
+	std::cout << output.size();;
+
+	for(int p = 0; p < output.size(); p++){
+
+		string v = output[p];
+		
+		//here, each v = string of variable length
+		
+		int endy = v.length();
+		
+		for(int i = 0; i < v.length(); i++){ //now lets check all the things in the string
+			
+			if(v[0] == '<'){ //if the string starts w '<' we treat it as a tag
+			
+				//here i = character in the string
+				
+				if(v[1] == '?' && v[endy-1] == '?'){
+					
+					type = DECLARATION;
+					string temp;
+
+					//established that type == declaration. now we must return valid tag name (excluding <?__?>
+					
+					for(int k = 0; k < endy; k++){
+
+						if(v[k] == '<' || v[k] == '?' ||v[k] == '>' ){
+							continue;
+						}
+						
+							temp.push_back(v[k]);
+
+						}
+						
+						//pushback successful declaration
+						name = temp;
+						element = {type,name};
+						tokenizedInputVector.push_back(element);
+						std::cout<< name << " ";
+						size++;
+					}
+				
+				else if(v[1] == '/'){
+					
+					//aside - error checking
+					if(v[endy-1] == '/' || v[endy-1] == '?'){
+						tokenizedInputVector.clear();
+						return false;
+					}
+					
+					type = END_TAG;
+					string temp;
+					
+					//established endTag type. now we must determine valid tag name
+					
+					for(int k = 2; k < (endy-1); k++){
+						for(int bStart = 0; bStart < badStart.length(); bStart++){
+							
+							if(v[2] == badStart[bStart]){ //if the starting char is bad return false
+								tokenizedInputVector.clear();
+								return false;
+							}
+						}
+						for(int bad = 0; bad < badTag.length(); bad++){
+							
+							if(v[k] == badTag[bad] || v[k] == ' '){ //if any element in v, excluding </ == badTag or whitespace. return false
+								tokenizedInputVector.clear();
+								return false;
+							}
+							
+						}
+					}
+					
+					//ok now we have a valid end tag. bad chars been filtered out
+					
+					//now we must establish the tag name
+					for(int k = 0; k < endy; k++){
+						
+						if(v[k] == '<' && v[k] == '/' && v[k] == '>'){
+							continue;
+						}
+							
+						temp.push_back(v[k]);
+
+						}
+					//pushback successful declaration
+					name = temp;
+					element = {type,name};
+					tokenizedInputVector.push_back(element);
+					std::cout<< name << " ";
+					size++;
+					
+				}
+				
+				else if (v[endy-1] == '/'){
+					
+					//aside - error checking
+					if(v[1] == '/' || v[1] == '?'){
+						tokenizedInputVector.clear();
+						return false;
+					}
+					
+					type = EMPTY_TAG;
+					string temp;
+
+					//established that this is empty tag. now we must determine valid tag name
+					
+					for(int k = 1; k < (endy-2); k++){
+						for(int bStart = 0; bStart < badStart.length(); bStart++){
+							
+							if(v[1] == badStart[bStart]){ //if the starting char is bad return false
+								tokenizedInputVector.clear();
+								return false;
+							}
+						}
+						for(int bad = 0; bad < badTag.length(); bad++){
+							
+							if(v[k] == badTag[bad]){ //if any element in v, excluding /> == badTag or whitespace. return false
+								tokenizedInputVector.clear();
+								return false;
+							}
+							
+						}
+					}
+					
+					//ok now we have a valid empty tag. bad chars been filtered out
+					
+					//now we must establish the tag name
+					
+					for(int k = 0; k < endy; k++){
+						
+						if(k == ' '){
+							break;
+						}
+						
+						while(v[k] != '<' && v[k] != '/' && v[k] != '>'){
+							
+							temp.push_back(v[k]);
+
+							//pushback successful declaration
+
+						}
+					}
+				name = temp;
+				element = {type,name};
+				tokenizedInputVector.push_back(element);
+				std::cout<< name << " ";
+				size++;
+				}
+				
+				else{
+					
+					type = START_TAG;
+					string temp;
+					
+					// we have determined that this is a start tag. now we must validate tag name
+					
+					for(int k = 1; k < (endy-1); k++){
+						for(int bStart = 0; bStart < badStart.length(); bStart++){
+							
+							if(v[1] == badStart[bStart]){ //if the starting char is bad return false
+								tokenizedInputVector.clear();
+								return false;
+							}
+						}
+						for(int bad = 0; bad < badTag.length(); bad++){
+							
+							if(v[k] == badTag[bad]){ //if any element in v, excluding /> == badTag or whitespace. return false
+								tokenizedInputVector.clear();
+								return false;
+							}
+							
+						}
+					}
+
+					//ok now we have a valid empty tag. bad chars been filtered out
+					
+					//now we must establish the tag name
+					
+				for (int k = 1; k < endy && v[k] != ' '; k++) {
+					while (v[k] != '<' && v[k] != '/' && v[k] != '>' && v[k] != ' ') {
+						
+						temp.push_back(v[k]);
+												
+						k++; // increment k to move to the next character
+					}
+					
+					if (v[k] == ' ' || v[k] == '\n' || v[k] == '\t') {
+						break; // stop the loop if a space is encountered
+					}
+				}
+				name = temp;
+				// pushback successful declaration
+				element = {type, name};
+				tokenizedInputVector.push_back(element);
+				std::cout<< name << " ";
+				size++;
+				}	
+			}
+			
+			
+			if(v[0] != '<'){ //if the string DOES NOT start w '<' we do must act as if it is a content
+				
+				type = CONTENT;
+				
+				string temp;
+				
+				for(int k = 0; k < endy; k++){
+					
+					while(v[k] != ' '){
+
+					temp.push_back(v[k]);
+				
+					}
+				}
+				
+				//successfully put content in a string + excluded whitespace
+				name = temp;
+
+				//pushback successful declaration
+				element = {type,name};
+				tokenizedInputVector.push_back(element);
+				std::cout<< name << " ";
+				size++;
+				
+			}
+			
+		}
+	}
+	return true;
+	}
+
+	
+
+
+// TODO: Implement the parseTokenizedInput method here
 bool XMLParser::parseTokenizedInput()
 {
 	bool parsed = (tokenizedInputVector.size()==0);
@@ -263,10 +418,10 @@ bool XMLParser::parseTokenizedInput()
 
 	parsed =true;
 	return parsed;
-
 }
 
-//  Implement the clear method here
+
+// TODO: Implement the clear method here
 void XMLParser::clear()
 {
 	elementNameBag->clear();
@@ -275,7 +430,8 @@ void XMLParser::clear()
 	
 	elementNameBag=nullptr;
 	parseStack=nullptr;
-	//tokenizedInputVector=nullptr;
+
+	size = 0;
 }
 
 vector<TokenStruct> XMLParser::returnTokenizedInput() const
@@ -283,27 +439,15 @@ vector<TokenStruct> XMLParser::returnTokenizedInput() const
 	return tokenizedInputVector;
 }
 
-// Implement the containsElementName method
+// TODO: Implement the containsElementName method
 bool XMLParser::containsElementName(const std::string &inputString) const
 {
-	bool tokenized = (tokenizedInputVector.size()==0);
-	if (tokenized==true || parsed==false)
-	{
-		throw std::logic_error("It was not tokenized and/or parsed.");
-	}
-	bool test = elementNameBag->contains(inputString);
-	return test;
+	return elementNameBag->contains(inputString);
 }
 
-// Implement the frequencyElementName method
+// TODO: Implement the frequencyElementName method
 int XMLParser::frequencyElementName(const std::string &inputString) const
-{	
-	bool tokenized = (tokenizedInputVector.size()==0);
-	if (tokenized==true || parsed==false)
-	{
-		throw std::logic_error("It was not tokenized and/or parsed.");
-	}
-
-	int freq = elementNameBag->getFrequencyOf(inputString);
-	return freq;
+{
+	return (elementNameBag->getFrequencyOf(inputString));
 }
+

@@ -23,20 +23,27 @@ Stack<ItemType>::~Stack(){
 //DONE: Implement the isEmpty method here
 template<class ItemType>
 bool Stack<ItemType>::isEmpty() const{
-	return (headPtr == nullptr);
+	return (currentSize==0);
+	/*if (currentSize == 0){
+		return true;
+	}
+	else{
+		return false;
+	}*/
 }  // end isEmpty
 
 // DONE: Implement the size method here
 template<class ItemType>
 int Stack<ItemType>::size() const
 {
-	int empty = 0;
+	return currentSize;
+	/*int empty = 0;
 	if(isEmpty()){
 		return empty;
 	}
 	else{
 		return currentSize;
-	}
+	}*/
 }  // end size
 
 //DONE Implement the push method here
@@ -58,20 +65,14 @@ bool Stack<ItemType>::push(const ItemType& newItem){
 template<class ItemType>
 ItemType Stack<ItemType>::peek() const
 {
-	return headPtr->getItem();
-    /* (!isEmpty()) {
-        
-    }
-    else {
-        // Return a default-constructed ItemType object if stack is empty
-        return ItemType{};
-    }	*/
-
-	/*ItemType returnItem;
-	while(!isEmpty()); {//enforcing precondition during debugging
-		returnItem = headPtr->getItem();
+	if(currentSize == 0){
+		throw logic_error("stack is empty");
 	}
-	return returnItem;*/
+	else{
+		ItemType returnItem;
+		returnItem = headPtr->getItem();
+		return returnItem;
+	}
 }  // end peek
 
 //DONE Implement the pop method here
@@ -100,7 +101,8 @@ bool Stack<ItemType>::pop()
 template<class ItemType>
 void Stack<ItemType>::clear()
 {
-	while(!isEmpty()){
+	int n = currentSize;
+	for (int i = 0;i<n;i++){
 		pop();
 	}
 	currentSize = 0;
