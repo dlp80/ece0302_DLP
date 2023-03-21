@@ -8,7 +8,7 @@ using namespace std;
 
 // TODO Implement tests of your Stack class and XMLParser class here
 
-/*TEST_CASE( "Test Bag add", "[ADT Bag]" )
+TEST_CASE( "Test Bag add", "[ADT Bag]" )
 {
 	   INFO("Hint: testing Bag add()");
 		// Create a Bag to hold ints
@@ -97,7 +97,7 @@ TEST_CASE( "Test Stack handout-1", "[XMLParser]" )
        REQUIRE(charStack.size() == 6);
        charStack.clear();
        REQUIRE(charStack.isEmpty() == true);      
-}*/
+}
 
 // You can assume that the beginning and the end of CONTENT will not be filled with whitespace
 TEST_CASE( "Test XMLParser tokenizeInputString Handout-0", "[XMLParser]" )

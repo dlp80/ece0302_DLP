@@ -107,27 +107,15 @@ for (size_t i = 0; i < inputString.size(); i++) {
 if (!content.empty()) {
     output.push_back(content);
 }
+
 //test print
 for (const auto& item : output) {
     std::cout << item << " ";
 }
-	
-	// Push any remaining content onto stack
-	/*if (!output.empty()) {
-		//do not push whitespace as content
-		tagStack.push_back(output);
-	}*/
-	
-	//now we begin testing one thing from the stack at a time. first we check if char1
-	//is a '<' . if it is, then we call it a tag
-	//if we encounter a tag, we then type it, and determine tag name validity
-	//if the item is not a tag, we sort it as content
+ //temp vec should hold all parts of the string. now we will sort and inpsect each individual element
 
-	//bool isTag, isStuff;
-	//for later
-	//Stack<string> tempStack = tagStack;
 	vector<string> tempVec = output;
-	std::cout << output.size();;
+	
 
 	for(int p = 0; p < output.size(); p++){
 
@@ -143,7 +131,7 @@ for (const auto& item : output) {
 			
 				//here i = character in the string
 				
-				if(v[1] == '?' && v[endy-1] == '?'){
+				if(v[1] == '?'){
 					
 					type = DECLARATION;
 					string temp;
@@ -202,15 +190,18 @@ for (const auto& item : output) {
 					//ok now we have a valid end tag. bad chars been filtered out
 					
 					//now we must establish the tag name
-					for(int k = 0; k < endy; k++){
+				for (int k = 1; k < endy && v[k] != ' '; k++) {
+					while (v[k] != '<' && v[k] != '/' && v[k] != '>' && v[k] != ' ') {
 						
-						if(v[k] == '<' && v[k] == '/' && v[k] == '>'){
-							continue;
-						}
-							
 						temp.push_back(v[k]);
-
-						}
+												
+						k++; // increment k to move to the next character
+					}
+					
+					if (v[k] == ' ' || v[k] == '\n' || v[k] == '\t') {
+						break; // stop the loop if a space is encountered
+					}
+				}
 					//pushback successful declaration
 					name = temp;
 					element = {type,name};
@@ -255,7 +246,7 @@ for (const auto& item : output) {
 					
 					//now we must establish the tag name
 					
-					for(int k = 0; k < endy; k++){
+					for(int k = 1; k < (endy-2); k++){
 						
 						if(k == ' '){
 							break;
@@ -264,14 +255,14 @@ for (const auto& item : output) {
 						while(v[k] != '<' && v[k] != '/' && v[k] != '>'){
 							
 							temp.push_back(v[k]);
-
+							//k++;
 							//pushback successful declaration
 
 						}
 					}
 				name = temp;
-				element = {type,name};
-				tokenizedInputVector.push_back(element);
+				//element = {type,name};
+				tokenizedInputVector.push_back({type,name});
 				std::cout<< name << " ";
 				size++;
 				}
@@ -284,6 +275,11 @@ for (const auto& item : output) {
 					// we have determined that this is a start tag. now we must validate tag name
 					
 					for(int k = 1; k < (endy-1); k++){
+						if(k == ' ' || k == '\n' || k == '\t'){
+							k = endy-2;
+							break;
+						}
+						else{
 						for(int bStart = 0; bStart < badStart.length(); bStart++){
 							
 							if(v[1] == badStart[bStart]){ //if the starting char is bad return false
@@ -298,7 +294,9 @@ for (const auto& item : output) {
 								return false;
 							}
 							
+						
 						}
+					}
 					}
 
 					//ok now we have a valid empty tag. bad chars been filtered out
@@ -323,7 +321,8 @@ for (const auto& item : output) {
 				tokenizedInputVector.push_back(element);
 				std::cout<< name << " ";
 				size++;
-				}	
+				}
+			break;	
 			}
 			
 			
@@ -335,28 +334,32 @@ for (const auto& item : output) {
 				
 				for(int k = 0; k < endy; k++){
 					
-					while(v[k] != ' '){
-
-					temp.push_back(v[k]);
+					if (v[k] == ' ' || v[k] == '\n' || v[k] == '\t') {
+						break; // stop the loop if a space is encountered
+					}
+					else{
+					temp.push_back(v[k]);}
 				
 					}
-				}
+				
 				
 				//successfully put content in a string + excluded whitespace
 				name = temp;
 
+				if(!name.empty()){
 				//pushback successful declaration
 				element = {type,name};
 				tokenizedInputVector.push_back(element);
-				std::cout<< name << " ";
+				std::cout<< temp << " ";
 				size++;
-				
+				}
+			break;
 			}
 			
 		}
 	}
-	return true;
-	}
+return true;
+}
 
 	
 
