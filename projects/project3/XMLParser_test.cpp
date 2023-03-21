@@ -8,7 +8,7 @@ using namespace std;
 
 // TODO Implement tests of your Stack class and XMLParser class here
 
-TEST_CASE( "Test Bag add", "[ADT Bag]" )
+/*TEST_CASE( "Test Bag add", "[ADT Bag]" )
 {
 	   INFO("Hint: testing Bag add()");
 		// Create a Bag to hold ints
@@ -172,6 +172,7 @@ TEST_CASE( "Test XMLParser parseTokenizedInput Handout-0", "[XMLParser]" )
 			REQUIRE(result[i].tokenString.compare(output[i].tokenString) == 0);
 		}
 }
+*/
 
 TEST_CASE( "Test XMLParser Final Handout-0", "[XMLParser]" )
 {

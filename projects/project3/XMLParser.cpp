@@ -115,15 +115,24 @@ for (const auto& item : output) {
  //temp vec should hold all parts of the string. now we will sort and inpsect each individual element
 
 	vector<string> tempVec = output;
-	
+
 
 	for(int p = 0; p < output.size(); p++){
 
 		string v = output[p];
+
+		bool flag = false;
 		
 		//here, each v = string of variable length
 		
 		int endy = v.length();
+
+		for(int ff = 0; ff < (endy-1); ff++){
+			if(v[endy-2] == '/'){
+				flag = true;
+				break;
+			}
+		}
 		
 		for(int i = 0; i < v.length(); i++){ //now lets check all the things in the string
 			
@@ -131,7 +140,7 @@ for (const auto& item : output) {
 			
 				//here i = character in the string
 				
-				if(v[1] == '?'){
+				if(v[1] == '?' && flag == false){
 					
 					type = DECLARATION;
 					string temp;
@@ -156,7 +165,7 @@ for (const auto& item : output) {
 						size++;
 					}
 				
-				else if(v[1] == '/'){
+				else if(v[1] == '/' && flag == false){
 					
 					//aside - error checking
 					if(v[endy-1] == '/' || v[endy-1] == '?'){
@@ -211,7 +220,7 @@ for (const auto& item : output) {
 					
 				}
 				
-				else if (v[endy-1] == '/'){
+				else if (flag == true){
 					
 					//aside - error checking
 					if(v[1] == '/' || v[1] == '?'){
@@ -246,25 +255,25 @@ for (const auto& item : output) {
 					
 					//now we must establish the tag name
 					
-					for(int k = 1; k < (endy-2); k++){
+				for (int k = 1; k < endy && v[k] != ' '; k++) {
+					while (v[k] != '<' && v[k] != '/' && v[k] != '>' && v[k] != ' ') {
 						
-						if(k == ' '){
-							break;
-						}
-						
-						while(v[k] != '<' && v[k] != '/' && v[k] != '>'){
-							
-							temp.push_back(v[k]);
-							//k++;
-							//pushback successful declaration
-
-						}
+						temp.push_back(v[k]);
+												
+						k++; // increment k to move to the next character
 					}
-				name = temp;
-				//element = {type,name};
-				tokenizedInputVector.push_back({type,name});
-				std::cout<< name << " ";
-				size++;
+					
+					if (v[k] == ' ' || v[k] == '\n' || v[k] == '\t') {
+						break; // stop the loop if a space is encountered
+					}
+				}
+					//pushback successful declaration
+					name = temp;
+					element = {type,name};
+					tokenizedInputVector.push_back(element);
+					std::cout<< name << " ";
+					size++;
+					
 				}
 				
 				else{
