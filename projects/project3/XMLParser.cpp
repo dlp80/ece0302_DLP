@@ -207,7 +207,7 @@ for (const auto& item : output) {
 						k++; // increment k to move to the next character
 					}
 					
-					if (v[k] == ' ' || v[k] == '\n' || v[k] == '\t') {
+					if (v[k] == ' ' || v[k] == '\n' || v[k] == '\t' || v[k] == '\r') {
 						break; // stop the loop if a space is encountered
 					}
 				}
@@ -263,7 +263,7 @@ for (const auto& item : output) {
 						k++; // increment k to move to the next character
 					}
 					
-					if (v[k] == ' ' || v[k] == '\n' || v[k] == '\t') {
+					if (v[k] == ' ' || v[k] == '\n' || v[k] == '\t' || v[k] == '\r') {
 						break; // stop the loop if a space is encountered
 					}
 				}
@@ -284,7 +284,7 @@ for (const auto& item : output) {
 					// we have determined that this is a start tag. now we must validate tag name
 					
 					for(int k = 1; k < (endy-1); k++){
-						if(k == ' ' || k == '\n' || k == '\t'){
+						if(k == ' ' || k == '\n' || k == '\t' || k == '\r'){
 							k = endy-2;
 							break;
 						}
@@ -320,7 +320,7 @@ for (const auto& item : output) {
 						k++; // increment k to move to the next character
 					}
 					
-					if (v[k] == ' ' || v[k] == '\n' || v[k] == '\t') {
+					if (v[k] == ' ' || v[k] == '\n' || v[k] == '\t' || v[k] == '\r') {
 						break; // stop the loop if a space is encountered
 					}
 				}
@@ -343,7 +343,7 @@ for (const auto& item : output) {
 				
 				for(int k = 0; k < endy; k++){
 					
-					if (v[k] == ' ' || v[k] == '\n' || v[k] == '\t') {
+					if (v[k] == ' ' || v[k] == '\n' || v[k] == '\t' || v[k] == '\r') {
 						break; // stop the loop if a space is encountered
 					}
 					else{
@@ -376,60 +376,27 @@ return true;
 // TODO: Implement the parseTokenizedInput method here
 bool XMLParser::parseTokenizedInput()
 {
-	bool parsed = (tokenizedInputVector.size()==0);
-	if (parsed)
-	{
-		return false;
-	}
-
-	int amt=tokenizedInputVector.size();
-	StringTokenType startType = tokenizedInputVector[0].tokenType;
-	StringTokenType endType   = tokenizedInputVector[amt-1].tokenType;
-
-	if( (startType!=1 && startType!=5) || endType!=2)
-	{
-		return false;
-	}
-	else
-	{
-		int startTagAmt=0, endTagAmt=0;
-		//going thru vector 
-		for (int i = 0; i<amt;i++)
-		{
-			//if it is a start tag add to stack
-			if (tokenizedInputVector[i].tokenType==1)
-			{
-				parseStack->push(tokenizedInputVector[i].tokenString);
-				startTagAmt++;
+		parseStack->clear();
+	_TokenStruct_ token;
+	std::string holdthis;
+	for(int i=0;i<tokenizedInputVector.size();i++){
+		token=tokenizedInputVector.at(i);
+		if(token.tokenType==START_TAG){
+			parseStack->push(token.tokenString);
+			elementNameBag->add(token.tokenString);
+		}
+		else if(token.tokenType==END_TAG){
+			holdthis=parseStack->peek();
+			if(holdthis!=token.tokenString){
+				return false;
 			}
-			//if end tag
-			else if (tokenizedInputVector[i].tokenType==2)
-			{
-				//first end tag matches last start tag
-				if (tokenizedInputVector[i].tokenString==parseStack->peek())
-				{
-					parseStack->pop();
-				}
-				else{
-					parsed=false;
-					return false;
-				}
-				endTagAmt++;
-			}
+			parseStack->pop();
 		}
-		
-		if (startTagAmt!=endTagAmt)
-		{
-			return false;
-		}
-		if (parseStack->size()!=0)
-		{
-			return false;
+		else if(token.tokenType==EMPTY_TAG){//if empty tag
+			elementNameBag->add(token.tokenString);
 		}
 	}
-
-	parsed =true;
-	return parsed;
+	return true;
 }
 
 

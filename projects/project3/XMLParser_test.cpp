@@ -8,7 +8,7 @@ using namespace std;
 
 // TODO Implement tests of your Stack class and XMLParser class here
 
-/*TEST_CASE( "Test Bag add", "[ADT Bag]" )
+TEST_CASE( "Test Bag add", "[ADT Bag]" )
 {
 	   INFO("Hint: testing Bag add()");
 		// Create a Bag to hold ints
@@ -172,7 +172,7 @@ TEST_CASE( "Test XMLParser parseTokenizedInput Handout-0", "[XMLParser]" )
 			REQUIRE(result[i].tokenString.compare(output[i].tokenString) == 0);
 		}
 }
-*/
+
 
 TEST_CASE( "Test XMLParser Final Handout-0", "[XMLParser]" )
 {
@@ -199,4 +199,102 @@ TEST_CASE( "Test XMLParser Final Handout-0", "[XMLParser]" )
 		REQUIRE(myXMLParser.frequencyElementName("size") == 6);
 		REQUIRE(myXMLParser.containsElementName("color_swatch"));
 		REQUIRE(myXMLParser.frequencyElementName("color_swatch") == 15);
+}
+TEST_CASE("Non-readable characters", "[XMLParser]")
+{
+	XMLParser myXMLParser;
+
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString("\n")); //**
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString("\n\r"));
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString("\n\t"));
+
+	REQUIRE(myXMLParser.tokenizeInputString("\n<foo>"));
+	REQUIRE(myXMLParser.tokenizeInputString(" <foo> "));
+	REQUIRE(myXMLParser.tokenizeInputString("\n\t<foo>\r"));
+	REQUIRE(myXMLParser.tokenizeInputString("\n<foo \n\r>"));
+	REQUIRE(myXMLParser.tokenizeInputString(" \n<foo \n\r\t property=123 \n > \n\t123 \n</foo> "));
+	REQUIRE(myXMLParser.parseTokenizedInput());
+}
+
+TEST_CASE("Illegal characters", "[XMLParser]")
+{
+	XMLParser myXMLParser;
+
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString("<"));
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString(">"));
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString("<>"));
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString("</>"));
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString("</foo/>"));
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString(" \n/foo<\r\t "));
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString(" \n/>foo<\r\t "));
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString(" \n/>f/o<>o<\r\t "));
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString(" \n/>foo<\r\t "));
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString(" \n/>foo<\r\t "));
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString("<foo !\"#$%&'()*+,/;<=>?@[\\]^`{|}~.></foo>"));
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString("<f!oo></foo>"));
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString("<foo></f\"oo>"));
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString("<foo><bar></b@r></foo>"));
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString("<f(o)o />"));
+
+	REQUIRE(myXMLParser.tokenizeInputString(" \n/foo<bar>\r\t "));
+	REQUIRE_FALSE(myXMLParser.parseTokenizedInput());
+	REQUIRE(myXMLParser.tokenizeInputString(" \nfoo\r\t "));
+	REQUIRE_FALSE(myXMLParser.parseTokenizedInput());
+	REQUIRE(myXMLParser.tokenizeInputString(" \n/foo\r\t "));
+	REQUIRE_FALSE(myXMLParser.parseTokenizedInput());
+	REQUIRE(myXMLParser.tokenizeInputString(" \n/fo?o,\r\t "));
+	REQUIRE_FALSE(myXMLParser.parseTokenizedInput());
+	REQUIRE(myXMLParser.tokenizeInputString("<foo !\"#$%&'()*+,/;=?@[\\]^`{|}~.></foo>"));
+	REQUIRE(myXMLParser.parseTokenizedInput());
+}
+
+TEST_CASE("Singular tag", "[XMLParser]")
+{
+	XMLParser myXMLParser;
+
+	REQUIRE(myXMLParser.tokenizeInputString("<tag>"));
+	REQUIRE_FALSE(myXMLParser.parseTokenizedInput());
+	REQUIRE(myXMLParser.tokenizeInputString("</tag>"));
+	REQUIRE_FALSE(myXMLParser.parseTokenizedInput());
+	REQUIRE(myXMLParser.tokenizeInputString(" <tag> "));
+	REQUIRE_FALSE(myXMLParser.parseTokenizedInput());
+	REQUIRE(myXMLParser.tokenizeInputString(" </tag> "));
+	REQUIRE_FALSE(myXMLParser.parseTokenizedInput());
+	REQUIRE(myXMLParser.tokenizeInputString(" <tag /> "));
+	REQUIRE_FALSE(myXMLParser.parseTokenizedInput());
+}
+
+TEST_CASE("No root element", "[XMLParse]")
+{
+	XMLParser myXMLParser;
+
+	REQUIRE(myXMLParser.tokenizeInputString("<foo>Bar</foo>\n<div>\n\t<div>Body</div>\n</div>\n"));
+	REQUIRE_FALSE(myXMLParser.parseTokenizedInput());
+	REQUIRE(myXMLParser.tokenizeInputString("<div>\n\t<div>Body</div>\n</div>\n<foo>Bar</foo>\n"));
+	REQUIRE_FALSE(myXMLParser.parseTokenizedInput());
+}
+
+TEST_CASE("Tag within tag", "[XMLParser]")
+{
+	XMLParser myXMLParser;
+
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString("<foo <bar>>content</foo>"));
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString("<foo>content</foo <bar>>"));
+	REQUIRE_FALSE(myXMLParser.tokenizeInputString("<foo <bar> />"));
+}
+
+TEST_CASE("Mismatched start and end tags", "[XMLParser]")
+{
+	XMLParser myXMLParser;
+
+	REQUIRE(myXMLParser.tokenizeInputString("</foo><foo>"));
+	REQUIRE_FALSE(myXMLParser.parseTokenizedInput());
+	REQUIRE(myXMLParser.tokenizeInputString("<foo></bar>"));
+	REQUIRE_FALSE(myXMLParser.parseTokenizedInput());
+	REQUIRE(myXMLParser.tokenizeInputString("<foo><bar></foo></bar>"));
+	REQUIRE_FALSE(myXMLParser.parseTokenizedInput());
+	REQUIRE(myXMLParser.tokenizeInputString("<foo></foo><bar>"));
+	REQUIRE_FALSE(myXMLParser.parseTokenizedInput());
+	REQUIRE(myXMLParser.tokenizeInputString("<foo><bar></bar>"));
+	REQUIRE_FALSE(myXMLParser.parseTokenizedInput());
 }
