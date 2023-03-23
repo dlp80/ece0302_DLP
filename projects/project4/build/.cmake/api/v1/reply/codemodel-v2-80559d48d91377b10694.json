@@ -1,0 +1,124 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						2,
+						3,
+						5
+					]
+				},
+				{
+					"build" : "lib",
+					"jsonFile" : "directory-lib-Debug-e9069484d90298468a11.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "lib",
+					"targetIndexes" : 
+					[
+						1,
+						4
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "P4",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "compare::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-compare-Debug-f2012b43d2bfda869c2a.json",
+					"name" : "compare",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "image::@306ed2d68c6501e8728f",
+					"jsonFile" : "target-image-Debug-bfb8601e2b0a2f46c9db.json",
+					"name" : "image",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "pathfinder::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-pathfinder-Debug-32638bebc0fc1d8f8adc.json",
+					"name" : "pathfinder",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "submission::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-submission-Debug-d1daed01cdfa5d19a650.json",
+					"name" : "submission",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "test-image::@306ed2d68c6501e8728f",
+					"jsonFile" : "target-test-image-Debug-115ec5589adc02cd603d.json",
+					"name" : "test-image",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "test-queue::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-test-queue-Debug-04a5cbf4a08c66c9688e.json",
+					"name" : "test-queue",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/dlapa/OneDrive/Documents/Sophomore Year @ PITT/classes spring/302/starter-code-ece0302/projects/project4/build",
+		"source" : "C:/Users/dlapa/OneDrive/Documents/Sophomore Year @ PITT/classes spring/302/starter-code-ece0302/projects/project4"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}
