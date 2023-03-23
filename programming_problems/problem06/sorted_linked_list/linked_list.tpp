@@ -78,7 +78,7 @@ void LinkedList<T>::insert(std::size_t position, const T& item)
 {
 	    // Insert the item at the specified position in the linked list
     if (position > itemCount + 1 || position < 0) {
-        throw std::out_of_range("position out of range.");
+        throw std::range_error("position out of range.");
     }
     Node<T>* newNode = new Node<T>(item);
     if (position == 0) {
@@ -90,19 +90,7 @@ void LinkedList<T>::insert(std::size_t position, const T& item)
         prev->setNext(newNode);
     }
     itemCount++;
-	/*if ((position >= 0) && (position <= itemCount)) {
-		Node<T>* newNodePtr = new Node<T>(item);
-		if (position == 0) {
-			newNodePtr -> setNext(headPtr);
-			headPtr = newNodePtr;
-		}
-		else {
-			Node<T>* prevPtr = getNodeAt(position-1);
-			newNodePtr -> setNext( prevPtr -> getNext() );
-			prevPtr -> setNext( newNodePtr );
-		}
-		itemCount++;
-	} */
+
 } //end insert
 
 template <typename T>
@@ -125,7 +113,7 @@ void LinkedList<T>::remove(std::size_t position)
 		delete curPtr;
 		itemCount--;
 	} 
-	else if (position < 0){
+	else if (position < 0 || position > itemCount){
 		throw(std::range_error("error! out of range"));
 	}
 }
@@ -149,7 +137,9 @@ T LinkedList<T>::getEntry(std::size_t position) const
 	{
 		return getNodeAt(position)->getItem();
 	}
-	else throw(std::range_error("error! out of range"));
+	else if(position < 0 || position > itemCount){
+	throw(std::range_error("error! out of range"));
+	}
 }
 
 template <typename T>
@@ -178,4 +168,3 @@ Node<T>* LinkedList<T>::getNodeAt(std::size_t position) const
 	}
 	return curPtr;
 } //end getNodeAt
-

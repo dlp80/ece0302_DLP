@@ -86,9 +86,11 @@ void SortedLinkedList<T>::remove(const T& item)
       if(getEntry(i) == item){
         remove(i);
       }
+      else{
+        throw std::range_error("item not found");
+      }
     }
   }
-  
   // TODO
 }
 
@@ -134,10 +136,10 @@ T SortedLinkedList<T>::getEntry(std::size_t position) const
 template <typename T> //possibly done
 long int SortedLinkedList<T>::getPosition(const T& item)
 {
-  getLength();
-  for(long int i = 0; i < getLength(); i++){
+    for(long int i = 0; i < getLength(); i++){
     if(item == getEntry(i)){
         return i;
+        break;
     }
   }
   return -1; //do we need to throw an error?
