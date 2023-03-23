@@ -392,7 +392,7 @@ bool XMLParser::parseTokenizedInput()
 			}
 			parseStack->pop();
 		}
-		else if(token.tokenType==EMPTY_TAG){//if empty tag
+		else if(token.tokenType==EMPTY_TAG || token.tokenType==DECLARATION){//if empty tag
 			elementNameBag->add(token.tokenString);
 		}
 	}

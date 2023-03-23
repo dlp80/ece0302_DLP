@@ -52,7 +52,7 @@ public:
 
 private:
 
-  // TODO
+  std::size_t dim;
 
 };
 
