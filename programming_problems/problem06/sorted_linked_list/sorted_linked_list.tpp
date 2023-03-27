@@ -30,6 +30,11 @@ SortedLinkedList<T>::SortedLinkedList(LinkedList<T> unsorted_list)
     for (std::size_t i = 1; i <= sorted_list.getLength(); i++) {
         LinkedList<T>::insert(i, sorted_list.getEntry(i));
     }
+
+   /* for (int i=0;i<unsorted_list.getLength();i++)
+    {
+      SortedLinkedList<T>::insert(item);
+    }*/
 }
 
 template <typename T> //NA
@@ -73,6 +78,22 @@ void SortedLinkedList<T>::insert(const T& item)
   else{
     LinkedList<T>::insert(0, item);
   }
+  //1 check if empty then insert start
+  //2 if item > value item next to it, increment position. once item < item value next to it, perform insert at position
+
+ /* if(isEmpty()){
+  LinkedList<T>::insert(0, item);
+  }
+  else{
+    for(int i = 0; i < getLength(); i++){
+      if(item > getEntry(i)){
+        continue;
+      }
+      if(item < getEntry(i)){
+        LinkedList<T>::insert(i, item);
+      }
+    }
+  }*/
 }
 
 template <typename T>

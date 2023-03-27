@@ -37,7 +37,9 @@ public:
   T peekFront();
 
 private:
-
+  
+  int currentSize = 0;
+  Node<T>* headPtr;
   // L must conform to AbstractList interface
   L internal_list;
 };
