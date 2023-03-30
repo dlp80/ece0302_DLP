@@ -19,20 +19,21 @@ void Queue<T,L>::enqueue(const T& item)
 template <typename T, typename L>
 void Queue<T,L>::dequeue()
 {
-
 	if(!isEmpty()){
 		//if stack is not empty, delete top
-		Node<T>* nodeToDelPtr = headPtr;
-		headPtr = headPtr->getNext();
+		Node<T>* temp = headPtr;
+
+		for (int i=0; i<(currentSize-1); i++){
+			temp=temp->getNext();
+		}
 
 		//return deleted node to system
-		nodeToDelPtr->setNext(nullptr);
-		delete nodeToDelPtr;
-		nodeToDelPtr = nullptr;
+		temp->setNext(nullptr);
+		delete temp;
+		temp = nullptr;
 		//decrement size counter
 		currentSize--;
 	}
-
 }
 
   // return a copy of the item at the front of the queue

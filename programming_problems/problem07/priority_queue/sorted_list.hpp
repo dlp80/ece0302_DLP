@@ -3,6 +3,7 @@
 #define _SORTED_LIST_HPP_
 
 #include "abstract_sorted_list.hpp"
+#include "list.hpp"
 
 // T is any orderable type
 // L must conform to the AbstractList Interface
