@@ -30,10 +30,11 @@ int main(int argc, char *argv[])
 typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "list" telling it to use linkedl
   QueueType frontier;
 
-  //point coords
+//point coords
 //ints i and j
   int i=0;
   int j=0;
+  int redcount = 0;
 
   for(int x = 0; x<image.width(); x++){ //exit failure if multiple reds** -- if any green return exit failure 
   ///may need to be changed -- not allowed to loop thru entire image
@@ -43,12 +44,18 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
       if(image(x,y)==RED){
         Loc lstart = {x, y}; 
         frontier.enqueue(lstart);
-        break;
+        redcount++;
+      }
+      if (redcount > 1){ //if there are more than 1 red pixels return false!!!!!!!
+        EXIT_FAILURE;
       }
     }
   }
 
-  Loc current = frontier.peekFront();
+  Loc current = frontier.peekFront(); //current defines the start location
+  std::vector<Loc> explored;
+
+
 
   frontier.enqueue({i-1, j});
   frontier.enqueue({i+1, j});
@@ -56,11 +63,22 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
   frontier.enqueue({i, j+1});
 
   Image<Pixel> result=image;
-  int expl [image.width()][image.height()]; //readjust how expl is being used -- this is e\where the SF happens
+  //int expl [image.width()][image.height()]; //readjust how expl is being used -- this is e\where the SF happens
   //Loc expl [image.width()][image.height()]; 
   //infinite loop to find all possible exits
 
+  //we then enter an infinite while loop. cases are based on the provided pseudocode
   while(1){
+    if(frontier.isEmpty()){ //case 1 no sttes to explore
+      EXIT_FAILURE;
+    }
+
+
+  }
+
+}
+/*
+{  while(1){
     std::cout<<"while ";
     if(frontier.isEmpty()){
        std::cout<<current.row<<" "<<current.col;
@@ -125,5 +143,5 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
 std::cout << "doneeee!!!!! >_<";
   // Write solution image to file
   writeToFile(image, output_file);
-  
-}
+  }
+*/
