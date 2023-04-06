@@ -27,15 +27,13 @@ int main(int argc, char *argv[])
   Image<Pixel> image = readFromFile(input_file); //where readin happens
 
 ///////////////todo
+  //initialize
 typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "list" telling it to use linkedl
   QueueType frontier;
-
-  //initialize
-
   int redcount = 0;
   Loc lstart;
 
-  for(int x = 0; x<image.width(); x++){ //exit failure if multiple reds** -- if any green return exit failure 
+  for(int x = 0; x<image.width(); x++){ //locate initial position
     for(int y=0; y<image.height();y++){
 
       //determine RED location
@@ -45,7 +43,7 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
         redcount++;
       }
       if (redcount > 1){ //if there are more than 1 red pixels return false!!!!!!!
-        EXIT_FAILURE;
+        return EXIT_FAILURE;
       }
     }
   }
@@ -63,20 +61,23 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
     }
   }
 
-  //if the frontier is empty, return error
-    if(frontier.isEmpty()){
-      image(current.row, current.col)=GREEN;
-       writeToFile(image, output_file);
-       return EXIT_FAILURE;
-    }
-
     //if our red is at an exit, color it green and return success
     if(current.row==0 || current.row==image.width()-1 || current.col==0 || current.col==image.height()-1){
       image(current.row, current.col)=GREEN;
       writeToFile(image, output_file);
       return EXIT_SUCCESS;
     }
+    //if the frontier is empty, return error
+    else if(frontier.isEmpty()){
+      image(current.row, current.col)=GREEN;
+       writeToFile(image, output_file);
+       return EXIT_FAILURE;
+    }
 
+  frontier.enqueue({current.row-1, current.col});
+  frontier.enqueue({current.row+1, current.col});
+  frontier.enqueue({current.row, current.col-1});
+  frontier.enqueue({current.row, current.col+1});
 
     //for the big purple chunk of if statements, add checks to ensure it isnt trying to move to an edgecase
 
@@ -84,16 +85,15 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
     while(1){
 
     if(frontier.isEmpty()){
-      image(current.row, current.col)=GREEN;
-       writeToFile(image, output_file);
-       return EXIT_SUCCESS;
+      //image(current.row, current.col)=GREEN;
+       //writeToFile(image, output_file);
+       //return EXIT_SUCCESS;
+      std::cout << "error! no solultion found";
+       return EXIT_FAILURE;
     }
-    
-    
-      expl[current.row][current.col]=0;
-      
-      Loc top={current.row-1, current.col};
-      Loc bottom={current.row+1, current.col};
+      expl[current.row][current.col]=1;
+      Loc top={current.row-1,current.col};
+      Loc bottom={current.row+1,current.col};
       Loc left = {current.row,current.col-1};
       Loc right = {current.row,current.col+1};
       
@@ -101,6 +101,7 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
     if(current.row==0 || current.row==image.width()-1 || current.col==0 || current.col==image.height()-1){
         image(current.row, current.col)=GREEN;
         writeToFile(image, output_file);
+        std::cout << "solultion found :)";
         return EXIT_SUCCESS;
       }
     else{
@@ -128,15 +129,19 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
 
     //checking if we are at an endpoint yet
 
+  if(current.row==0 || current.row==image.width()-1 || current.col==0 || current.col==image.height()-1){
+    image(current.row, current.col)=GREEN;
+    writeToFile(image, output_file);
+    std::cout << "solultion found :)";
+    return EXIT_SUCCESS;
   }
+}
 
   if(current.row==0 || current.row==image.width()-1 || current.col==0 || current.col==image.height()-1){
     image(current.row, current.col)=GREEN;
     writeToFile(image, output_file);
+    std::cout << "solultion found :)";
     return EXIT_SUCCESS;
   }
-
-  writeToFile(image, output_file);
-  return EXIT_SUCCESS;
 }
 //#################################################################//

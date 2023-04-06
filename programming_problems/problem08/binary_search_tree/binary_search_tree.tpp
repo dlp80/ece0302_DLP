@@ -95,41 +95,42 @@ bool BinarySearchTree<KeyType, ItemType>::insert(
     const KeyType& key, const ItemType& item)
 {
     // TODO 
-
-
-    Node<KeyType, ItemType>* new_node = new Node<KeyType, ItemType>;
-    new_node->key = key;
-    new_node->data = item;
-    new_node->left = nullptr;
-    new_node->right = nullptr;
-    Node<KeyType, ItemType>* curr = root;
-    Node<KeyType, ItemType>* parent = nullptr;
-
-    if(isEmpty()){ //if tree is empty, we insert @ root
-        root = new_node;
+    Node<KeyType, ItemType>* newNode=new Node<KeyType, ItemType>();
+    newNode->data=item;
+    newNode->key=key;
+    
+    //if empty tree
+    if(isEmpty()) 
+    {
+        root = newNode;
         return true;
     }
-    else if(!isEmpty()){
-        search(key, curr, parent);
-
-         if (key == curr->key) {
-            return false;
-        } 
-        else if (key < curr->key) {
-            if (curr->left != 0) {
-                parent->left = new_node;
-                return true;
-            } 
-        } 
-        else {
-            if (curr->right != 0) {
-                parent->right = new_node;
-                return true;
-            } 
+    else
+    {
+        if(retrieve(newNode->key, newNode->data))
+        {
+          return false;
         }
-    }
-    return false;
+        else
+        {
+            Node<KeyType, ItemType>* curr;
+            Node<KeyType, ItemType>* par;
 
+            search(newNode->key, curr, par);
+            if(newNode->key < curr->key)
+            {
+                curr->left=newNode;
+            }
+            if(newNode->key > curr->key)
+            {
+                curr->right = newNode;
+            }
+            return true;
+        }  
+        
+    }
+    delete newNode;
+    return false;
 }
 
 template <typename KeyType, typename ItemType>
@@ -178,72 +179,29 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
 
     // case 5: item to delete has two children
 
-while (curr != nullptr && curr->key != key) {
-        parent = curr;
-        if (key < curr->key) {
-            curr = curr->left;
-        } else {
-            curr = curr->right;
-        }
+    if (isEmpty())
+        return false; // empty tree
+    // TODO
+    Node<KeyType, ItemType>* temp= new Node<KeyType, ItemType>;
+    temp->key=key;
+    Node<KeyType, ItemType>* p;
+    
+    search(temp->key, temp, p);
+    
+    if(p==root)
+    {
+        destroy();
+    }
+    if(p->left==nullptr && temp->right==nullptr)
+    {
+        delete temp;
+    }
+    if(temp->left == nullptr)
+    {
+        p=temp->left;
     }
 
-    if (curr == nullptr) {
-        return false; // key not found
-    }
-
-    // case 1: one thing in the tree
-    if (curr == root && curr->left == nullptr && curr->right == nullptr) {
-        delete curr;
-        root = nullptr;
-        return true;
-    }
-
-    // case 2: found deleted item at leaf
-    if (curr->left == nullptr && curr->right == nullptr) {
-        if (parent->left == curr) {
-            parent->left = nullptr;
-        } else {
-            parent->right = nullptr;
-        }
-        delete curr;
-        return true;
-    }
-
-    // case 3: item to delete has only a right child
-    if (curr->left == nullptr) {
-        if (parent->left == curr) {
-            parent->left = curr->right;
-        } else {
-            parent->right = curr->right;
-        }
-        curr->right = nullptr;
-        delete curr;
-        return true;
-    }
-
-    // case 4: item to delete has only a left child
-    if (curr->right == nullptr) {
-        if (parent->left == curr) {
-            parent->left = curr->left;
-        } else {
-            parent->right = curr->left;
-        }
-        curr->left = nullptr;
-        delete curr;
-        return true;
-    }
-
-    // case 5: item to delete has two children
-    Node<KeyType, ItemType>* min_right = curr->right;
-    while (min_right->left != nullptr) {
-        min_right = min_right->left;
-    }
-    KeyType min_key = min_right->key;
-    ItemType min_data = min_right->data;
-    remove(min_key); // recursively remove the minimum node
-    curr->key = min_key;
-    curr->data = min_data;
-    return true;
+    return true; // default should never get here
 }
 
 template <typename KeyType, typename ItemType>
