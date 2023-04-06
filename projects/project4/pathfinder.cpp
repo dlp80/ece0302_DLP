@@ -30,19 +30,17 @@ int main(int argc, char *argv[])
 typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "list" telling it to use linkedl
   QueueType frontier;
 
-//point coords
-//ints i and j
-  int i=0;
-  int j=0;
+  //initialize
+
   int redcount = 0;
+  Loc lstart;
 
   for(int x = 0; x<image.width(); x++){ //exit failure if multiple reds** -- if any green return exit failure 
-  ///may need to be changed -- not allowed to loop thru entire image
     for(int y=0; y<image.height();y++){
 
       //determine RED location
       if(image(x,y)==RED){
-        Loc lstart = {x, y}; 
+        lstart = {x, y}; 
         frontier.enqueue(lstart);
         redcount++;
       }
@@ -52,96 +50,95 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
     }
   }
 
-  Loc current = frontier.peekFront(); //current defines the start location
-  std::vector<Loc> explored;
+   //current defines the start location
+  Loc current = frontier.peekFront();
 
+  bool expl [image.width()][image.height()]; //setting this to 0 - explored
+  bool journey [image.width()][image.height()]; //s
 
+  //initializing arrays to be full of 0
+  for(int i = 0; i<image.width(); i++){
+      for(int j = 0; j<image.height(); i++){
+        expl[i][j] = 0;
+        journey[i][j] = 0;
+    }
+  }
 
-  frontier.enqueue({i-1, j});
-  frontier.enqueue({i+1, j});
-  frontier.enqueue({i, j-1});
-  frontier.enqueue({i, j+1});
+  //if the frontier is empty, return error
+    if(frontier.isEmpty()){
+      image(current.row, current.col)=GREEN;
+       writeToFile(image, output_file);
+       exit(-1);
+    }
 
-  Image<Pixel> result=image;
-  //int expl [image.width()][image.height()]; //readjust how expl is being used -- this is e\where the SF happens
-  //Loc expl [image.width()][image.height()]; 
-  //infinite loop to find all possible exits
-
-  //we then enter an infinite while loop. cases are based on the provided pseudocode
-  while(1){
-    if(frontier.isEmpty()){ //case 1 no sttes to explore
-      EXIT_FAILURE;
+    //if our red is at an exit, color it green and return success
+    if(current.row==0 || current.row==image.width()-1 || current.col==0 || current.col==image.height()-1){
+      image(current.row, current.col)=GREEN;
+      writeToFile(image, output_file);
+      EXIT_SUCCESS;
     }
 
 
-  }
+    //for the big purple chunk of if statements, add checks to ensure it isnt trying to move to an edgecase
 
-}
-/*
-{  while(1){
-    std::cout<<"while ";
+    //infinite checking loop!!
+    while(1){  
     if(frontier.isEmpty()){
-       std::cout<<current.row<<" "<<current.col;
-
-       result(14,0)=GREEN;
-       std::cout<< "no solution";
-       writeToFile(result, output_file);
+      image(current.row, current.col)=GREEN;
+       writeToFile(image, output_file);
        exit(-1);
     }
     else{
-      expl[current.row][current.col]=1; //*****
+      expl[current.row][current.col]=1;
       Loc top={current.row-1, current.col};
       Loc bottom={current.row+1, current.col};
       Loc left = {current.row,current.col-1};
       Loc right = {current.row,current.col+1};
 
-      if(current.row==0 || current.row==image.width()-1 || current.col==0 || current.col==image.height()-1){
-        result(current.row, current.col)=GREEN;
-        writeToFile(result, output_file);
-        std::cout<< "solution found";
+    if(current.row==0 || current.row==image.width()-1 || current.col==0 || current.col==image.height()-1){
+        image(current.row, current.col)=GREEN;
+        writeToFile(image, output_file);
         EXIT_SUCCESS;
       }
-
-      else{
-        if(image(current.row+1, current.col)==WHITE && expl[current.row+1][current.col]==0){
+    else{
+        if(image(current.row+1, current.col)==WHITE && expl[current.row+1][current.col]!=1){
           frontier.enqueue(bottom);
           expl[current.row+1][current.col]=1;
         }
-        if(image(current.row-1, current.col)==WHITE && expl[current.row][current.col+1]==0){
+        if(image(current.row-1, current.col)==WHITE && expl[current.row-1][current.col]!=1){
           frontier.enqueue(top);
-          expl[current.row][current.col-1]=1;
+          expl[current.row-1][current.col]=1;
         }
-        if(image(current.row, current.col-1)==WHITE && expl[current.row][current.col-1]==0){
+        if(image(current.row, current.col-1)==WHITE && expl[current.row][current.col-1]!=1){
           frontier.enqueue(left);
           expl[current.row][current.col-1]=1;
         }
-        if(image(current.row, current.col+1)==WHITE && expl[current.row][current.col+1]==0){
+        if(image(current.row, current.col+1)==WHITE && expl[current.row+1][current.col+1]!=1){
           frontier.enqueue(right);
           expl[current.row][current.col+1]=1;
-        }
+        }//end of path exploring
+        
+        frontier.dequeue(); //popping purposes
       } //end of if else statements that checks the sides
     } //end of checking if frontier is empty
 
+    //checking if we are at an endpoint yet
     if(current.row==0 || current.row==image.width()-1 || current.col==0 || current.col==image.height()-1){
-      result(current.row, current.col)=GREEN;
-      writeToFile(result, output_file);
-      std::cout << "exit solution found";
-      EXIT_SUCCESS;
-    }
+        image(current.row, current.col)=GREEN;
+        writeToFile(image, output_file);
+        EXIT_SUCCESS;
+      }
+
   }
+
   if(current.row==0 || current.row==image.width()-1 || current.col==0 || current.col==image.height()-1){
-    result(current.row, current.col)=GREEN;
-    writeToFile(result, output_file);
-    std::cout<<"exit solution found";
+    image(current.row, current.col)=GREEN;
+    writeToFile(image, output_file);
     EXIT_SUCCESS;
   }
 
-
-///////////////
-
-//final statement
-std::cout << "doneeee!!!!! >_<";
+  std::cout << "doneeee!!!!! >_<";
   // Write solution image to file
   writeToFile(image, output_file);
-  }
-*/
+}
+//#################################################################//

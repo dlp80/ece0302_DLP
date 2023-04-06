@@ -6,6 +6,8 @@
 
 typedef BinarySearchTree<int, int> TreeType;
 
+
+
 TEST_CASE("Test Construction", "[construction]") {
     TreeType bst1;
 
@@ -42,6 +44,8 @@ TEST_CASE("Test Retrieve", "[retrieve]") {
     REQUIRE(bst1.retrieve(5, item));
     REQUIRE(bst1.retrieve(10, item));
 }
+
+
 
 TEST_CASE("Test Remove", "[remove]") {
     TreeType bst1;
@@ -95,4 +99,3 @@ TEST_CASE("Test Copy Assign", "[copy assign]") {
     REQUIRE(!bst2.retrieve(51, item));
     
 }
-

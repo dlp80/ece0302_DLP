@@ -96,6 +96,7 @@ bool BinarySearchTree<KeyType, ItemType>::insert(
 {
     // TODO 
 
+
     Node<KeyType, ItemType>* new_node = new Node<KeyType, ItemType>;
     new_node->key = key;
     new_node->data = item;
@@ -104,22 +105,30 @@ bool BinarySearchTree<KeyType, ItemType>::insert(
     Node<KeyType, ItemType>* curr = root;
     Node<KeyType, ItemType>* parent = nullptr;
 
-    search(key, curr, parent);
-
-    if (parent == nullptr) {
-        // Tree is empty, make the new node the root
+    if(isEmpty()){ //if tree is empty, we insert @ root
         root = new_node;
         return true;
-    } else if (key < parent->key) {
-        parent->left = new_node;
-        return true;
-    } else if (key > parent->key) {
-        parent->right = new_node;
-        return true;
-    } else{
-        // Key already exists in the tree
-        return false;
     }
+    else if(!isEmpty()){
+        search(key, curr, parent);
+
+         if (key == curr->key) {
+            return false;
+        } 
+        else if (key < curr->key) {
+            if (curr->left != 0) {
+                parent->left = new_node;
+                return true;
+            } 
+        } 
+        else {
+            if (curr->right != 0) {
+                parent->right = new_node;
+                return true;
+            } 
+        }
+    }
+    return false;
 
 }
 
