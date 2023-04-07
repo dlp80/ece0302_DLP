@@ -2,6 +2,8 @@
 #ifndef _DATABASE_H_
 #define _DATABASE_H_
 
+using namespace std;
+
 template <typename T>
 class Database
 {
@@ -32,6 +34,15 @@ public:
 private:
 
   // TODO:
+  size_t amt;
+
+  BinarySearchTree<std::string, int> bst;
+  BinarySearchTree<std::string, int> bst2;
+  
+  std::vector<std::string> keys1;
+  std::vector<std::string> keys2;
+  
+  List<T> lst;
 
 };
 

@@ -161,8 +161,8 @@ bool BinarySearchTree<KeyType, ItemType>::retrieve(
 template <typename KeyType, typename ItemType>
 bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
 {
-    if (isEmpty()){
-        return false;} // empty tree
+    //if (isEmpty()){
+      //  return false;} // empty tree
 
     BinarySearchTree<KeyType, ItemType>::Node<KeyType, ItemType> *curr = root;
     BinarySearchTree<KeyType, ItemType>::Node<KeyType, ItemType> *parent = nullptr;
@@ -191,14 +191,17 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
     if(p==root)
     {
         destroy();
+       // return false;
     }
     if(p->left==nullptr && temp->right==nullptr)
     {
         delete temp;
+       // return false;
     }
     if(temp->left == nullptr)
     {
         p=temp->left;
+       // return false;
     }
 
     return true; // default should never get here

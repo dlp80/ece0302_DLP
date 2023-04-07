@@ -3,6 +3,65 @@
 
 #include "abstract_list.hpp"
 
+/*
+template<class ItemType>
+class Node
+{
+private:
+   ItemType        item; // A data item
+   Node<ItemType>* next; // Pointer to next node
+   
+public:
+   Node();
+   Node(const ItemType& anItem);
+   Node(const ItemType& anItem, Node<ItemType>* nextNodePtr);
+   void setItem(const ItemType& anItem);
+   void setNext(Node<ItemType>* nextNodePtr);
+   ItemType getItem() const ;
+   Node<ItemType>* getNext() const ;
+}; // end Node
+
+template<class ItemType>
+Node<ItemType>::Node() : next(nullptr)
+{
+} // end default constructor
+
+template<class ItemType>
+Node<ItemType>::Node(const ItemType& anItem) : item(anItem), next(nullptr)
+{
+} // end constructor
+
+template<class ItemType>
+Node<ItemType>::Node(const ItemType& anItem, Node<ItemType>* nextNodePtr) :
+                item(anItem), next(nextNodePtr)
+{
+} // end constructor
+
+template<class ItemType>
+void Node<ItemType>::setItem(const ItemType& anItem)
+{
+   item = anItem;
+} // end setItem
+
+template<class ItemType>
+void Node<ItemType>::setNext(Node<ItemType>* nextNodePtr)
+{
+   next = nextNodePtr;
+} // end setNext
+
+template<class ItemType>
+ItemType Node<ItemType>::getItem() const
+{
+   return item;
+} // end getItem
+
+template<class ItemType>
+Node<ItemType>* Node<ItemType>::getNext() const
+{
+   return next;
+} // end getNext  */
+
+//////////////////////////////given code
 template <typename T>
 class List: public AbstractList<T>
 {
@@ -45,9 +104,9 @@ public:
   void setEntry(std::size_t position, const T& newValue);
 
 private:
-
-  //TODO
-  
+  size_t CAP=100;
+  size_t itemCount;
+  T arr[101];
 };
 
 #include "list.tpp"

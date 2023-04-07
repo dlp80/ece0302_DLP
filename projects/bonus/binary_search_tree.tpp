@@ -96,6 +96,41 @@ bool BinarySearchTree<KeyType, ItemType>::insert(
     const KeyType& key, const ItemType& item)
 {
     // TODO 
+        Node<KeyType, ItemType>* newNode=new Node<KeyType, ItemType>();
+    newNode->data=item;
+    newNode->key=key;
+    
+    //if empty tree
+    if(isEmpty()) 
+    {
+        root = newNode;
+        return true;
+    }
+    else
+    {
+        if(retrieve(newNode->key, newNode->data))
+        {
+          return false;
+        }
+        else
+        {
+            Node<KeyType, ItemType>* curr;
+            Node<KeyType, ItemType>* par;
+
+            search(newNode->key, curr, par);
+            if(newNode->key < curr->key)
+            {
+                curr->left=newNode;
+            }
+            if(newNode->key > curr->key)
+            {
+                curr->right = newNode;
+            }
+            return true;
+        }  
+        
+    }
+    delete newNode;
     return false;
 }
 
@@ -131,7 +166,26 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
         return false; // empty tree
 
     // TODO
+    Node<KeyType, ItemType>* temp= new Node<KeyType, ItemType>;
+    temp->key=key;
+    Node<KeyType, ItemType>* p;
+    
+    search(temp->key, temp, p);
+    
+    if(p==root)
+    {
+        destroy();
+    }
+    if(p->left==nullptr && temp->right==nullptr)
+    {
+        delete temp;
+    }
+    if(temp->left == nullptr)
+    {
+        p=temp->left;
+    }
 
+    return true; // default should never get here
 
     // case one thing in the tree
 
@@ -143,7 +197,7 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
 
     // case, item to delete has two children
 
-    return false; // default should never get here
+    //return false; // default should never get here
 }
 
 template <typename KeyType, typename ItemType>

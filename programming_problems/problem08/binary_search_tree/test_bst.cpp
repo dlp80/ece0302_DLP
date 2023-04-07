@@ -46,7 +46,6 @@ TEST_CASE("Test Retrieve", "[retrieve]") {
 }
 
 
-
 TEST_CASE("Test Remove", "[remove]") {
     TreeType bst1;
 
@@ -58,8 +57,10 @@ TEST_CASE("Test Remove", "[remove]") {
 
     int item;
 
+    //REQUIRE(bst1.retrieve(12, item));
     bst1.remove(12);
     REQUIRE(!bst1.retrieve(12, item));
+
 
     bst1.remove(18);
     REQUIRE(!bst1.retrieve(18, item));
