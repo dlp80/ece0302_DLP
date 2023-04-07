@@ -82,7 +82,9 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
     //for the big purple chunk of if statements, add checks to ensure it isnt trying to move to an edgecase
 
     //infinite checking loop!!
-    while(1){
+  while(1){
+
+    expl[current.row][current.col]=1; //check
 
     if(frontier.isEmpty()){
       image(current.row, current.col)=GREEN;
@@ -96,12 +98,6 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
       int r = current.row;
       int c = current.col;
 
-     // Loc top={current.row-1, current.col};
-     // Loc bottom={current.row+1, current.col};
-     // Loc left = {current.row,current.col-1};
-     // Loc right = {current.row,current.col+1};
-      
-
     if(current.row==0 || current.row==image.width()-1 || current.col==0 || current.col==image.height()-1){
         image(current.row, current.col)=GREEN;
         writeToFile(image, output_file);
@@ -109,21 +105,25 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
       }
 
         //expl[current.row][current.col]=1;
-        if(image(r-1, c)==WHITE && expl[r-1][c]==0 && journey[r-1][c]==0){ // example line
+        if(image(r-1, c)==WHITE && expl[r-1][c]==0 && journey[r-1][c]==0 && r-1 > -1){ // example line
           frontier.enqueue({r-1, c}); // replace w exact ({r-1, c})
           journey[current.row-1][current.col]=1;
+          //expl[current.row-1][current.col]=1;
         }
-        if(image(r+1, c)==WHITE && expl[r+1][c]==0 && journey[r+1][c]==0){
+        if(image(r+1, c)==WHITE && expl[r+1][c]==0 && journey[r+1][c]==0 && r+1 < image.width()){
           frontier.enqueue({r+1, c});
           journey[current.row+1][current.col]=1;
+          //expl[current.row+1][current.col]=1;
         }
-        if(image(r, c-1)==WHITE && expl[r][c-1]==0 && journey[r][c-1]==0){
+        if(image(r, c-1)==WHITE && expl[r][c-1]==0 && journey[r][c-1]==0 && c-1 > -1){
           frontier.enqueue({r, c-1});
           journey[current.row][current.col-1]=1;
+          //expl[current.row][current.col-1]=1;
         }
-        if(image(r, c+1)==WHITE && expl[r][c+1]==0 && journey[r][c+1]==0){
+        if(image(r, c+1)==WHITE && expl[r][c+1]==0 && journey[r][c+1]==0 && c+1 < image.height()){
           frontier.enqueue({r, c+1});
           journey[current.row][current.col+1]=1;
+          //expl[current.row][current.col+1]=1;
         }//end of path exploring
         
       //frontier.dequeue(); //popping purposes
