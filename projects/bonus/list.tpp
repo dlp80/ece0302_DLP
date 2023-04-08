@@ -4,8 +4,8 @@ template <typename T>
 List<T>::List() : itemCount(0)
 {
   //TODO
-  //headPtr = nullptr;
-  //itemCount = 0;
+  headPtr = nullptr;
+  itemCount = 0;
 }
 
 template <typename T>
@@ -19,12 +19,28 @@ template <typename T>
 List<T>::List(const List<T>& x)
 {
   //TODO
-  CAP=x.CAP;
-  itemCount=0;
-  for(size_t i = 1; i <= x.itemCount;i++)
-  {
-    insert(i, x.getEntry(i));
-  }
+  itemCount = x.itemCount;
+  Node<T>* origPtr = x.headPtr;
+	//check if original is empty, if so make copy empty
+	if (origPtr == nullptr) 
+		headPtr = nullptr;
+	else {
+		//make copy of first node
+		headPtr = new Node<T>();
+		headPtr -> setItem(origPtr -> getItem());
+		//copy remaining nodes
+		Node<T>* newPtr = headPtr; 
+		origPtr = origPtr -> getNext();
+		while (origPtr != nullptr) {
+			//get next item in list, and make new node with item, and link
+			T nextItem = origPtr -> getItem();
+			Node<T>* newNodePtr = new Node<T>(nextItem);
+			newPtr -> setNext(newNodePtr);
+			//shift pointers
+			newPtr = newPtr -> getNext();
+			origPtr = origPtr -> getNext();
+		} // end while
+	} // end if
 }
 
 template <typename T>
@@ -39,12 +55,8 @@ template <typename T>
 void List<T>::swap(List<T>& x) 
 {
   //TODO
-  CAP=x.CAP;
-  itemCount=0;
-  for(size_t i = 1; i <= x.itemCount;i++)
-  {
-    insert(i, x.getEntry(i));
-  }
+	std::swap(itemCount, x.itemCount);
+	std::swap(headPtr, x.headPtr);
 }
 
 template <typename T>
@@ -67,38 +79,47 @@ template <typename T>
 void List<T>::insert(std::size_t position, const T& item)
 {
   //TODO
-  itemCount++;
-  if (itemCount==(CAP) || itemCount<0)
-  {
-    return false;
-  }
-  else
-  {
-    arr[position]=item;
-  }
-  return true;
+  	if ((position >= 0) && (position <= itemCount)) {
+		Node<T>* newNodePtr = new Node<T>(item);
+		if (position == 0) {
+			newNodePtr -> setNext(headPtr);
+			headPtr = newNodePtr;
+		}
+		else {
+			Node<T>* prevPtr = getNodeAt(position-1);
+			newNodePtr -> setNext( prevPtr -> getNext() );
+			prevPtr -> setNext( newNodePtr );
+		}
+		itemCount++;
+}
 }
 
 template <typename T>
 void List<T>::remove(std::size_t position)
 {
   //TODO
-  if(itemCount<=1)
-  {
-    return false;
-  }
-  for (size_t i = position; i<=itemCount;i++)
-  {
-    arr[i]=arr[i+1];
-  }
-  return true;
+		if ((position >= 0) && (position < itemCount)) {
+		Node<T>* curPtr = nullptr;
+		if (position == 0) {
+			curPtr = headPtr;
+			headPtr = headPtr -> getNext();
+		}
+		else {
+			Node<T>* prevPtr = getNodeAt(position - 1);
+			curPtr = prevPtr -> getNext();
+			prevPtr -> setNext( curPtr -> getNext() );
+		}
+		delete curPtr;
+		itemCount--;
+}
 }
 
 template <typename T>
 void List<T>::clear()
 {
   //TODO
-  itemCount=0;
+	while (!isEmpty())
+	remove(0);
 }
 
 template <typename T>
@@ -106,17 +127,28 @@ T List<T>::getEntry(std::size_t position) const
 {
   //TODO
   //return T();
-  return arr[position];
+  if(isEmpty()){
+		throw(std::range_error("error! out of range"));
+	}
+
+	else if ((position >= 0) && (position <= itemCount)) 
+	{
+		return getNodeAt(position)->getItem();
+	}
+	else if(position < 0 || position > itemCount){
+	throw(std::range_error("error! out of range"));
+	}
 }
 
 template <typename T>
 void List<T>::setEntry(std::size_t position, const T& newValue)
 {
   //TODO
-  arr[position]=newValue;
+		if((position >= 0) && (position < itemCount))
+	  getNodeAt(position)->setItem(newValue);
 }
 
-/*
+
 template <typename T>
 Node<T>* List<T>::getNodeAt(std::size_t position) const
 {
@@ -126,4 +158,4 @@ Node<T>* List<T>::getNodeAt(std::size_t position) const
 		curPtr = curPtr -> getNext();
 	}
 	return curPtr;
-} //end getNodeAt */
+} //end getNodeAt 

@@ -50,7 +50,7 @@ List<T>& List<T>::operator=(List<T> x)
 template <typename T>
 void List<T>::swap(List<T>& x) 
 {
-  std::swap(itemCount, x.itemCount);
+	std::swap(itemCount, x.itemCount);
 	std::swap(headPtr, x.headPtr);
   //TODO
 }

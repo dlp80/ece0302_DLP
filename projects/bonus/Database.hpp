@@ -2,7 +2,9 @@
 #ifndef _DATABASE_H_
 #define _DATABASE_H_
 
-using namespace std;
+#include "list.hpp"
+#include "binary_search_tree.hpp"
+#include <vector>
 
 template <typename T>
 class Database

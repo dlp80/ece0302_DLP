@@ -96,7 +96,7 @@ bool BinarySearchTree<KeyType, ItemType>::insert(
     const KeyType& key, const ItemType& item)
 {
     // TODO 
-        Node<KeyType, ItemType>* newNode=new Node<KeyType, ItemType>();
+    Node<KeyType, ItemType>* newNode=new Node<KeyType, ItemType>();
     newNode->data=item;
     newNode->key=key;
     
@@ -162,49 +162,113 @@ bool BinarySearchTree<KeyType, ItemType>::retrieve(
 template <typename KeyType, typename ItemType>
 bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
 {
-    if (isEmpty())
+//TODO
+    if (isEmpty()) {
         return false; // empty tree
-
-    // TODO
-    Node<KeyType, ItemType>* temp= new Node<KeyType, ItemType>;
-    temp->key=key;
-    Node<KeyType, ItemType>* p;
-    
-    search(temp->key, temp, p);
-    
-    if(p==root)
-    {
-        destroy();
-    }
-    if(p->left==nullptr && temp->right==nullptr)
-    {
-        delete temp;
-    }
-    if(temp->left == nullptr)
-    {
-        p=temp->left;
     }
 
-    return true; // default should never get here
+    Node<KeyType, ItemType>* curr = nullptr;
+    Node<KeyType, ItemType>* parent = nullptr;
+    search(key, curr, parent);
 
-    // case one thing in the tree
+    if (curr == nullptr) {
+        return false; // key not found
+    }
 
-    // case, found deleted item at leaf
+    // case 1: one thing in the tree
+    if (curr == root && curr->left == nullptr && curr->right == nullptr) {
+        delete curr;
+        root = nullptr;
+        return true;
+    }
 
-    // case, item to delete has only a right child
+    // case 2: found deleted item at leaf
+    if (curr->left == nullptr && curr->right == nullptr) {
+        if (parent->left == curr) {
+            parent->left = nullptr;
+        } else {
+            parent->right = nullptr;
+        }
+        delete curr;
+        return true;
+    }
 
-    // case, item to delete has only a left child
+    // case 3: item to delete has only a right child
+    if (curr->left == nullptr) {
+        if (parent == nullptr) {
+            root = curr->right;
+        } else if (parent->left == curr) {
+            parent->left = curr->right;
+        } else {
+            parent->right = curr->right;
+        }
+        delete curr;
+        return true;
+    }
 
-    // case, item to delete has two children
+    // case 4: item to delete has only a left child
+    if (curr->right == nullptr) {
+        if (parent == nullptr) {
+            root = curr->left;
+        } else if (parent->left == curr) {
+            parent->left = curr->left;
+        } else {
+            parent->right = curr->left;
+        }
+        delete curr;
+        return true;
+    }
 
-    //return false; // default should never get here
+    // case 5: item to delete has two children
+    Node<KeyType, ItemType>* inorderSuccessorParent = nullptr;
+    Node<KeyType, ItemType>* inorderSuccessor = nullptr;
+    inorder(curr, inorderSuccessor, inorderSuccessorParent);
+    curr->key = inorderSuccessor->key;
+    if (inorderSuccessorParent->left == inorderSuccessor) {
+        inorderSuccessorParent->left = inorderSuccessor->right;
+    } else {
+        inorderSuccessorParent->right = inorderSuccessor->right;
+    }
+    delete inorderSuccessor;
+    return true;
+
 }
 
 template <typename KeyType, typename ItemType>
 void BinarySearchTree<KeyType, ItemType>::inorder(Node<KeyType, ItemType>* curr,
     Node<KeyType, ItemType>*& in, Node<KeyType, ItemType>*& parent)
 {
+   
     // TODO: find inorder successor of "curr" and assign to "in"
+        if (curr == nullptr) {
+        in = nullptr;
+        parent = nullptr;
+        return;
+    }
+
+    if (curr->right != nullptr) {
+        // If curr has a right child, then inorder successor is leftmost node in right subtree
+        in = curr->right;
+        while (in->left != nullptr)
+            in = in->left;
+        parent = curr;
+        return;
+    }
+
+    // If curr does not have a right child, then we need to backtrack to find inorder successor
+    parent = nullptr;
+    in = nullptr;
+    Node<KeyType, ItemType>* temp = root;
+    while (temp != curr) {
+        if (curr->key < temp->key) {
+            parent = temp;
+            in = temp;
+            temp = temp->left;
+        } else {
+            temp = temp->right;
+        }
+    }
+
 
 }
 
