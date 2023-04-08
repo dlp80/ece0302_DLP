@@ -100,3 +100,29 @@ TEST_CASE("Test Copy Assign", "[copy assign]") {
     REQUIRE(!bst2.retrieve(51, item));
     
 }
+
+
+TEST_CASE("Test treeSort", "[treeSort]") {
+    // Create an array of integers with duplicates
+    int arr[] = { 5, 2, 8, 2, 9, 5, 1 };
+    int size = sizeof(arr) / sizeof(arr[0]);
+
+    // Sort the array using treeSort
+    TreeType bst1;
+
+    bst1.treeSort(arr, size);
+
+    // Check that the array is sorted and duplicates are removed
+
+    std::cout << arr[0];
+    std::cout << arr[1];
+    std::cout << arr[2];
+    std::cout << arr[3];
+    std::cout << arr[4];
+
+    REQUIRE(arr[0] == 1);
+    REQUIRE(arr[1] == 2);
+    REQUIRE(arr[2] == 5);
+    REQUIRE(arr[3] == 8);
+    REQUIRE(arr[4] == 9);
+}
