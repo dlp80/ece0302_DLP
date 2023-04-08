@@ -101,3 +101,4 @@ bool Database<T>::contains(std::string key) {
     }
     return false;
 }
+
