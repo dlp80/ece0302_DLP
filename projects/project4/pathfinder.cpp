@@ -64,11 +64,15 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
     }
   }
 
-  //if the frontier is empty, return error
+  //first init of r and c
+    int r = current.row;
+    int c = current.col;
+
+  //if the frontier is empty, return success
     if(frontier.isEmpty()){
       image(current.row, current.col)=GREEN;
        writeToFile(image, output_file);
-       return EXIT_FAILURE;
+       return EXIT_SUCCESS;
     }
 
     //if our red is at an exit, color it green and return success
@@ -84,8 +88,6 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
     //infinite checking loop!!
   while(1){
 
-    expl[current.row][current.col]=1; //check
-
     if(frontier.isEmpty()){
       image(current.row, current.col)=GREEN;
        writeToFile(image, output_file);
@@ -94,9 +96,11 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
     
       current = frontier.peekFront();
       frontier.dequeue();
-      journey[current.row][current.col]=0;
+      journey[r][c]=0;
       int r = current.row;
       int c = current.col;
+
+      expl[r][c]=1; //set to one so that you don't stay there?
 
     if(current.row==0 || current.row==image.width()-1 || current.col==0 || current.col==image.height()-1){
         image(current.row, current.col)=GREEN;
@@ -107,22 +111,22 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
         //expl[current.row][current.col]=1;
         if(image(r-1, c)==WHITE && expl[r-1][c]==0 && journey[r-1][c]==0 && r-1 > -1){ // example line
           frontier.enqueue({r-1, c}); // replace w exact ({r-1, c})
-          journey[current.row-1][current.col]=1;
+          journey[r-1][c]=1;
           //expl[current.row-1][current.col]=1;
         }
         if(image(r+1, c)==WHITE && expl[r+1][c]==0 && journey[r+1][c]==0 && r+1 < image.width()){
           frontier.enqueue({r+1, c});
-          journey[current.row+1][current.col]=1;
+          journey[r+1][c]=1;
           //expl[current.row+1][current.col]=1;
         }
         if(image(r, c-1)==WHITE && expl[r][c-1]==0 && journey[r][c-1]==0 && c-1 > -1){
           frontier.enqueue({r, c-1});
-          journey[current.row][current.col-1]=1;
+          journey[r][c-1]=1;
           //expl[current.row][current.col-1]=1;
         }
         if(image(r, c+1)==WHITE && expl[r][c+1]==0 && journey[r][c+1]==0 && c+1 < image.height()){
           frontier.enqueue({r, c+1});
-          journey[current.row][current.col+1]=1;
+          journey[r][c+1]=1;
           //expl[current.row][current.col+1]=1;
         }//end of path exploring
         
@@ -135,7 +139,7 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
 
   }
 
-  if(current.row==0 || current.row==image.width()-1 || current.col==0 || current.col==image.height()-1){
+ if(current.row==0 || current.row==image.width()-1 || current.col==0 || current.col==image.height()-1){
     image(current.row, current.col)=GREEN;
     writeToFile(image, output_file);
     return EXIT_SUCCESS;
