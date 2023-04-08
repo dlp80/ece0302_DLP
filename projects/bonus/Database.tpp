@@ -41,16 +41,17 @@ template <typename T>
 bool Database<T>::remove(std::string key) {
     // TODO
     //return false;
-    if(amt==0)
+    if(isEmpty())
     {
         return false;
     }
+    else{
     int here=0;
     for (int i =0; i<amt;i++)
     {
         if(keys1.at(i)==key || keys2.at(i)==key)
         {
-            here =i;
+            here = i;
             break;
         }
     }
@@ -58,7 +59,13 @@ bool Database<T>::remove(std::string key) {
     keys2.erase(keys2.begin()+here);
     lst.remove(here);
     amt--;
-    return true;
+    }
+    if(contains(key)){
+        return false;
+    }
+    else{
+        return true;
+    }
 }
 
 template <typename T>
