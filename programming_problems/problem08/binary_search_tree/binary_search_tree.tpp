@@ -161,56 +161,82 @@ bool BinarySearchTree<KeyType, ItemType>::retrieve(
 template <typename KeyType, typename ItemType>
 bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
 {
-    //if (isEmpty()){
-      //  return false;} // empty tree
+        if (isEmpty()) {
+        return false; // empty tree
+    }
 
-    BinarySearchTree<KeyType, ItemType>::Node<KeyType, ItemType> *curr = root;
-    BinarySearchTree<KeyType, ItemType>::Node<KeyType, ItemType> *parent = nullptr;
+    Node<KeyType, ItemType>* curr = nullptr;
+    Node<KeyType, ItemType>* parent = nullptr;
+    search(key, curr, parent);
 
-    // TODO
+    if (curr == nullptr) {
+        return false; // key not found
+    }
 
     // case 1: one thing in the tree
+    if (curr == root && curr->left == nullptr && curr->right == nullptr) {
+        delete curr;
+        root = nullptr;
+        return true;
+    }
 
     // case 2: found deleted item at leaf
+    if (curr->left == nullptr && curr->right == nullptr) {
+        if (parent->left == curr) {
+            parent->left = nullptr;
+        } else {
+            parent->right = nullptr;
+        }
+        delete curr;
+        return true;
+    }
 
     // case 3: item to delete has only a right child
+    if (curr->left == nullptr) {
+        if (parent == nullptr) {
+            root = curr->right;
+        } else if (parent->left == curr) {
+            parent->left = curr->right;
+        } else {
+            parent->right = curr->right;
+        }
+        delete curr;
+        return true;
+    }
 
     // case 4: item to delete has only a left child
+    if (curr->right == nullptr) {
+        if (parent == nullptr) {
+            root = curr->left;
+        } else if (parent->left == curr) {
+            parent->left = curr->left;
+        } else {
+            parent->right = curr->left;
+        }
+        delete curr;
+        return true;
+    }
 
     // case 5: item to delete has two children
+    Node<KeyType, ItemType>* inorderSuccessorParent = nullptr;
+    Node<KeyType, ItemType>* inorderSuccessor = nullptr;
+    inorder(curr, inorderSuccessor, inorderSuccessorParent);
+    curr->key = inorderSuccessor->key;
+    if (inorderSuccessorParent->left == inorderSuccessor) {
+        inorderSuccessorParent->left = inorderSuccessor->right;
+    } else {
+        inorderSuccessorParent->right = inorderSuccessor->right;
+    }
+    delete inorderSuccessor;
+    return true;
 
-    if (isEmpty())
-        return false; // empty tree
-    // TODO
-    Node<KeyType, ItemType>* temp= new Node<KeyType, ItemType>;
-    temp->key=key;
-    Node<KeyType, ItemType>* p;
-    
-    search(temp->key, temp, p);
-    
-    if(p==root)
-    {
-        destroy();
-       // return false;
-    }
-    if(p->left==nullptr && temp->right==nullptr)
-    {
-        delete temp;
-       // return false;
-    }
-    if(temp->left == nullptr)
-    {
-        p=temp->left;
-       // return false;
-    }
-
-    return true; // default should never get here
 }
 
 template <typename KeyType, typename ItemType>
 void BinarySearchTree<KeyType, ItemType>::inorder(Node<KeyType, ItemType>* curr,
     Node<KeyType, ItemType>*& in, Node<KeyType, ItemType>*& parent)
 {
+   
     // TODO: find inorder successor of "curr" and assign to "in"
         if (curr == nullptr) {
         in = nullptr;
@@ -279,4 +305,36 @@ void BinarySearchTree<KeyType, ItemType>::treeSort(KeyType arr[], int size) {
     // TODO: use the tree to sort the array items
 
     // TODO: overwrite input array values with sorted values
+    // Create an empty binary search tree
+    Node<KeyType, ItemType>* root = nullptr;
+
+    // Insert each unique item from the input array into the binary search tree
+    for (int i = 0; i < size; i++) {
+        ItemType item;
+        if (!retrieve(arr[i], item)) {
+            insert(arr[i], ItemType());
+        }
+    }
+
+    // Traverse the binary search tree in-order and overwrite the input array with the sorted data
+    int i = 0;
+    Node<KeyType, ItemType>* in;
+    Node<KeyType, ItemType>* parent;
+    inorder(root, in, parent);
+    while (in != nullptr) {
+        arr[i++] = in->key;
+        inorder(in, in, parent);
+    }
+
+    // Eliminate duplicates from the sorted array
+    int j = 0;
+    for (i = 0; i < size; i++) {
+        if (i == 0 || arr[i] != arr[i-1]) {
+            arr[j++] = arr[i];
+        }
+    }
+    // Fill the rest of the array with zeros to eliminate any remaining duplicates
+    for (i = j; i < size; i++) {
+        arr[i] = 0;
+    }
 }
