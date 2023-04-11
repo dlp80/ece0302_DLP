@@ -42,23 +42,33 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
       //determine RED location
       if(image(x,y)==RED){
         lstart = {x, y}; 
-        frontier.enqueue(lstart); //before entering the inf while loop, we have a start position
         redcount++;
       }
+      
       if (redcount > 1){ //if there are more than 1 red pixels return false!!!!!!!
-        EXIT_FAILURE;
+        return EXIT_FAILURE;
       }
     }
   }
 
-  //current defines the start location
+frontier.enqueue(lstart); //before entering the inf while loop, we have a start position in the Q
+
+//we can only proceed if the frontier IS NOT empty
+  //check if frontier has a start point - if not return failure
+    if(frontier.isEmpty()){
+      //image(current.row, current.col)=GREEN;
+       //writeToFile(image, output_file);
+       return EXIT_FAILURE; ////
+    }
+
+  //else, we can begin testing. here, current defines the start location
   Loc current = frontier.peekFront();
   bool expl [image.width()][image.height()]; // 0 = unexplored, 1 = explored
-  bool journey [image.width()][image.height()]; //s
+  bool journey [image.width()][image.height()]; //sa,e as expl
 
   //initializing arrays to be full of 0
-  for(int i = 0; i<image.width(); i++){
-      for(int j = 0; j<image.height(); j++){
+  for(int i = 0; i<image.height(); i++){
+      for(int j = 0; j<image.width(); j++){
         expl[i][j] = 0;
         journey[i][j] = 0;
     }
@@ -68,28 +78,21 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
     int r = current.row;
     int c = current.col;
 
-  //if the frontier is empty, return success
-    if(frontier.isEmpty()){
-      image(current.row, current.col)=GREEN;
-       writeToFile(image, output_file);
-       return EXIT_SUCCESS;
-    }
-
     //if our red is at an exit, color it green and return success
-    if(current.row==0 || current.row==image.width()-1 || current.col==0 || current.col==image.height()-1){
-      image(current.row, current.col)=GREEN;
-      writeToFile(image, output_file);
-      return EXIT_SUCCESS;
-    }
+  if(current.row==0 || current.row==image.width()-1 || current.col==0 || current.col==image.height()-1){
+    //image(current.row, current.col)=GREEN;
+    writeToFile(image, output_file);
+    return EXIT_SUCCESS;
+ }
 
 
-    //for the big purple chunk of if statements, add checks to ensure it isnt trying to move to an edgecase
+  //for the big purple chunk of if statements, add checks to ensure it isnt trying to move to an edgecase
 
     //infinite checking loop!!
   while(1){
 
     if(frontier.isEmpty()){
-      image(current.row, current.col)=GREEN;
+      //image(current.row, current.col)=GREEN;
        writeToFile(image, output_file);
        return EXIT_SUCCESS;
     }
@@ -97,10 +100,10 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
       current = frontier.peekFront();
       frontier.dequeue();
       journey[r][c]=0;
-      int r = current.row;
-      int c = current.col;
+      r = current.row;
+      c = current.col;
 
-      expl[r][c]=1; //set to one so that you don't stay there?
+      expl[current.row][current.col]=1; //set to one so that you don't stay there?
 
     if(current.row==0 || current.row==image.width()-1 || current.col==0 || current.col==image.height()-1){
         image(current.row, current.col)=GREEN;
@@ -129,20 +132,6 @@ typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "
           journey[r][c+1]=1;
           //expl[current.row][current.col+1]=1;
         }//end of path exploring
-        
-      //frontier.dequeue(); //popping purposes
-      //end of if else statements that checks the sides
-
-    //end of checking if frontier is empty
-
-    //checking if we are at an endpoint yet
-
-  }
-
- if(current.row==0 || current.row==image.width()-1 || current.col==0 || current.col==image.height()-1){
-    image(current.row, current.col)=GREEN;
-    writeToFile(image, output_file);
-    return EXIT_SUCCESS;
   }
 
   writeToFile(image, output_file);

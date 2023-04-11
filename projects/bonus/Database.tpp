@@ -23,6 +23,10 @@ template <typename T>
 bool Database<T>::add(std::string key1, std::string key2, const T& item) {
     // TODO
     //return false;
+
+    std::cout << key1 << std::endl << key2 << std::endl;
+    
+
 if(contains(key1) || contains(key2)){
     return false;
 }
@@ -41,6 +45,9 @@ template <typename T>
 bool Database<T>::remove(std::string key) {
     // TODO
     //return false;
+
+    std::cout << key;
+
     if(isEmpty())
     {
         return false;
@@ -58,6 +65,7 @@ bool Database<T>::remove(std::string key) {
     keys1.erase(keys1.begin()+here);
     keys2.erase(keys2.begin()+here);
     lst.remove(here);
+    lst.clear();
     amt--;
     }
     if(contains(key)){

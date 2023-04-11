@@ -154,4 +154,6 @@ TEST_CASE("Test Entry Types", "[entry type]") {
 }
 
 
-
+//test add many
+//remove may not be robust enough
+//when you delete a key's contents you also delete the key allocation itself. so not only is they key empty, the key does not exist
