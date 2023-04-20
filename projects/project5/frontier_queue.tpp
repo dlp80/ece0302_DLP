@@ -12,7 +12,7 @@ State<T> frontier_queue<T>::pop() {
   int index = 0;
 
   //iterate thru Q to find the min
-  for (int i=1; i<queue.size(); i++)
+  for (int i = 1; i<queue.size(); i++)
   {
     if(queue[i].getFCost() < min)
     {

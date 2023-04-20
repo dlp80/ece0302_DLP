@@ -37,15 +37,15 @@ public:
 private:
 
   // TODO:
-  size_t amt;
+  size_t amount;
 
-  BinarySearchTree<std::string, int> bst;
-  BinarySearchTree<std::string, int> bst2;
+  BinarySearchTree<std::string, int> bt;
+  BinarySearchTree<std::string, int> bt2;
   
-  std::vector<std::string> keys1;
-  std::vector<std::string> keys2;
+  std::vector<std::string> k1;
+  std::vector<std::string> k2;
   
-  List<T> lst;
+  List<T> list1;
 
 };
 

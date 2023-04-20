@@ -3,20 +3,20 @@
 template <typename T>
 Database<T>::Database() {
     // TODO
-    amt=0;
+    amount=0;
 }
 
 template <typename T>
 bool Database<T>::isEmpty() {
     // TODO
-    return (amt==0);
+    return (amount==0);
     //return false;
 }
 
 template <typename T>
 std::size_t Database<T>::getNumberOfEntries() {
     // TODO
-    return amt;
+    return amount;
 }
 
 template <typename T>
@@ -24,20 +24,21 @@ bool Database<T>::add(std::string key1, std::string key2, const T& item) {
     // TODO
     //return false;
 
-std::cout << key1 << std::endl << key2 << std::endl;
+//std::cout << key1 << std::endl << key2 << std::endl;
     
 
 if(contains(key1) || contains(key2)){
     return false;
 }
-    bst.insert(key1, amt);
-    bst2.insert(key2,amt);
+    bt.insert(key1, amount);
+    bt2.insert(key2,amount);
     
-    keys1.push_back(key1);
-    keys2.push_back(key2);
+    k1.push_back(key1);
+    k2.push_back(key2);
 
-    lst.insert(amt, item);
-    amt++;
+    list1.insert(amount, item);
+    amount++;
+
     return true;
 }
 
@@ -45,72 +46,77 @@ template <typename T>
 bool Database<T>::remove(std::string key) {
     // TODO
     //return false;
+    //cannot remove from false
 
-    std::cout << key;
+    //std::cout << key;
 
-    if(isEmpty())
-    {
+    if(isEmpty()){
         return false;
     }
-    else{
-    int here=0;
-    for (int i =0; i<amt;i++)
-    {
-        if(keys1.at(i)==key || keys2.at(i)==key)
+    
+    //
+    int index=0;
+    for (int i =0; i<amount;i++){
+        if(k1.at(i)==key || k2.at(i)==key)
         {
-            here = i;
+            index = i;
             break;
         }
     }
-    keys1.erase(keys1.begin()+here);
-    keys2.erase(keys2.begin()+here);
-    lst.remove(here);
-    lst.clear();
-    amt--;
-    }
+    k1.erase(k1.begin()+index);
+    k2.erase(k2.begin()+index);
+    
+    list1.remove(index);
+    
+    list1.clear();
+    amount--;
+    
     if(contains(key)){
         return false;
     }
-    else{
-        return true;
-    }
+    
+    return true;
+    
 }
 
 template <typename T>
 void Database<T>::clear() {
     // TODO
-    amt=0;
-    lst.clear();
-    bst.destroy();
-    bst2.destroy();
-    keys1.clear();
-    keys2.clear();
+
+    //zeroing out amount and clearing everything
+    amount=0;
+
+    k1.clear();
+    k2.clear();
+    list1.clear();
+
+    bt.destroy();
+    bt2.destroy();
+
 }
 
 template <typename T>
 T Database<T>::getValue(std::string key) {
     // TODO
     //return T();
-    int here=0;
-    for (int i =0; i<amt;i++)
-    {
-        if(keys1.at(i)==key || keys2.at(i)==key)
-        {
-            here =i;
+    //check with for loop if the key value exists in either k1, k2. return the entry
+    int j=0;
+    for (int i=0; i<amount;i++){
+        if(k1.at(i)==key || k2.at(i)==key){
+            j = i;
             break;
         }
     }
-    return lst.getEntry(here);
+    return list1.getEntry(j);
 }
 
 template <typename T>
 bool Database<T>::contains(std::string key) {
     // TODO
     //return false;
-    for (int i = 0; i<amt;i++)
-    {
-         if(keys1.at(i)==key || keys2.at(i)==key)
-        {
+    //check with for loop to ensure it exists in k1 or k2
+    for (int i = 0; i<amount;i++){
+        if(k1.at(i)==key || k2.at(i)==key){
             return true;
         }
     }
