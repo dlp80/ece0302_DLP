@@ -4,51 +4,51 @@
 
 template <typename T>
 State<T> frontier_queue<T>::pop() {
-
   //TODO
   //implement this the same way we implemented pop in the heap lecture. Compare using getFCost
-  // needs return statement
+  //we assume that the Q is full
+  
+  size_t min = queue[0].getFCost();
+  int index = 0;
 
-  int i =0;
-  size_t minimum=queue[0].getFCost();
-  int index=0;
-  for (i=1;i<queue.size();i++)
+  //iterate thru Q to find the min
+  for (int i=1; i<queue.size(); i++)
   {
-    if(queue[i].getFCost()<minimum)
+    if(queue[i].getFCost() < min)
     {
       index=i;
     }
   }
-  State<T> temp =queue.at(index);
+
+  //erase min value
+  State<T> place = queue.at(index);
   queue.erase(queue.begin()+index);
 
-  // needs return statement
-  return temp;
+  //return state value
+  return place;
 
 }
 
 template <typename T>
 void frontier_queue<T>::push(const T &p, std::size_t cost, std::size_t heur) {
-
   //TODO
   //implement this the same way we implemented push in the heap lecture.
-  State<T> temp(p, cost, heur);
-  queue.push_back(temp);
+  State<T> place(p, cost, heur);
+  queue.push_back(place);
 }
 
 template <typename T>
 bool frontier_queue<T>::empty() {
-
   //TODO
-
+  //return if size=0 is true
   return (queue.size()==0);
 }
 
 template <typename T> 
 bool frontier_queue<T>::contains(const T &p) {
-
   //TODO
-  for (int i = 0;i <queue.size();i++)
+  //traverse thru the Q, if the item is present, return true else return false
+  for (int i = 0; i <queue.size(); i++)
   { 
     if (queue[i].getValue()==p)
     {
@@ -56,17 +56,17 @@ bool frontier_queue<T>::contains(const T &p) {
     }
   }
   return false;
-
 }
 
 template <typename T>
 void frontier_queue<T>::replaceif(const T &p, std::size_t cost) {
-
   //TODO
-  int i=0;
-  for (i = 0;i<queue.size();i++)
+
+  for (int i = 0;i<queue.size();i++)
   {
-    if(queue[i].getValue()==p && queue[i].getPathCost()>cost)
+    //if the item at the ith place in Q, AND the new cost is < old cost
+    // update path w new cost
+    if(queue[i].getValue() == p && cost < queue[i].getPathCost())
     {
       queue[i].updatePathCost(cost);
     }

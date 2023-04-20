@@ -24,7 +24,7 @@ bool Database<T>::add(std::string key1, std::string key2, const T& item) {
     // TODO
     //return false;
 
-    std::cout << key1 << std::endl << key2 << std::endl;
+std::cout << key1 << std::endl << key2 << std::endl;
     
 
 if(contains(key1) || contains(key2)){

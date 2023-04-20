@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "test-solver.exe"
+			"path" : "test-frontier-queue.exe"
 		},
 		{
-			"path" : "test-solver.pdb"
+			"path" : "test-frontier-queue.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -27,7 +27,7 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 14,
+				"line" : 11,
 				"parent" : 0
 			}
 		]
@@ -55,13 +55,11 @@
 			},
 			"sourceIndexes" : 
 			[
-				0,
-				3,
-				9
+				0
 			]
 		}
 	],
-	"id" : "test-solver::@6890427a1f51a3e7e1df",
+	"id" : "test-frontier-queue::@6890427a1f51a3e7e1df",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -81,8 +79,8 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "test-solver",
-	"nameOnDisk" : "test-solver.exe",
+	"name" : "test-frontier-queue",
+	"nameOnDisk" : "test-frontier-queue.exe",
 	"paths" : 
 	{
 		"build" : ".",
@@ -94,9 +92,7 @@
 			"name" : "Source Files",
 			"sourceIndexes" : 
 			[
-				0,
-				3,
-				9
+				0
 			]
 		},
 		{
@@ -105,17 +101,15 @@
 			[
 				1,
 				2,
-				4,
-				6,
-				8
+				4
 			]
 		},
 		{
 			"name" : "",
 			"sourceIndexes" : 
 			[
-				5,
-				7
+				3,
+				5
 			]
 		}
 	],
@@ -124,24 +118,13 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "test_solver.cpp",
+			"path" : "test_frontier_queue.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"path" : "catch.hpp",
 			"sourceGroupIndex" : 1
-		},
-		{
-			"backtrace" : 1,
-			"path" : "puzzle.hpp",
-			"sourceGroupIndex" : 1
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "puzzle.cpp",
-			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
@@ -162,17 +145,6 @@
 			"backtrace" : 1,
 			"path" : "frontier_queue.tpp",
 			"sourceGroupIndex" : 2
-		},
-		{
-			"backtrace" : 1,
-			"path" : "puzzle_solver.hpp",
-			"sourceGroupIndex" : 1
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "puzzle_solver.cpp",
-			"sourceGroupIndex" : 0
 		}
 	],
 	"type" : "EXECUTABLE"
