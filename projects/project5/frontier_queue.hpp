@@ -36,7 +36,7 @@ public:
 
 private:
 
-  std::vector<State<T>> queue;
+  std::vector<State<T>> Q;
   
 };
 

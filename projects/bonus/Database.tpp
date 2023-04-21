@@ -55,7 +55,9 @@ bool Database<T>::remove(std::string key) {
     }
     
     //
-    int index=0;
+    int index = -1; //init index to -1, this will indicate that a matching
+    //entry has not yet been found
+
     for (int i =0; i<amount;i++){
         if(k1.at(i)==key || k2.at(i)==key)
         {
@@ -63,13 +65,24 @@ bool Database<T>::remove(std::string key) {
             break;
         }
     }
+    if (index == -1){ // If no matching entry was found, return false
+        return false;
+    }
+
     k1.erase(k1.begin()+index);
     k2.erase(k2.begin()+index);
-    
     list1.remove(index);
-    
-    list1.clear();
     amount--;
+
+    /*for(int i = index; i < amount; i++){
+        if(k1.at(i) == key || k2.at(i) == key){
+            index = i;
+            break;
+        }
+        k1.at(i) = k1.at(i+1);
+        k2.at(i) = k2.at(i+1);
+        list1.getEntry(i) = list1.getEntry(i+1);
+    }*/
     
     if(contains(key)){
         return false;
