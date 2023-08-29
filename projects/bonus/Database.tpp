@@ -59,8 +59,7 @@ bool Database<T>::remove(std::string key) {
     //entry has not yet been found
 
     for (int i =0; i<amount;i++){
-        if(k1.at(i)==key || k2.at(i)==key)
-        {
+        if(k1.at(i)==key || k2.at(i)==key){
             index = i;
             break;
         }

@@ -27,6 +27,8 @@ int main(int argc, char *argv[])
   Image<Pixel> image = readFromFile(input_file); //where readin happens
 
 ///////////////todo
+
+
   //initialize
 typedef Queue<Loc, List<Loc>> QueueType; //first item = location second item = "list" telling it to use linkedl
   QueueType frontier;
@@ -64,7 +66,7 @@ frontier.enqueue(lstart); //before entering the inf while loop, we have a start 
   //else, we can begin testing. here, current defines the start location
   Loc current = frontier.peekFront();
   bool expl [image.width()][image.height()]; // 0 = unexplored, 1 = explored
-  bool journey [image.width()][image.height()]; //sa,e as expl
+  bool journey [image.width()][image.height()]; //same as expl
 
   //initializing arrays to be full of 0
   for(int i = 0; i<image.height(); i++){
